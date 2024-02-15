@@ -3,8 +3,16 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# command files
+*.bat
+
 # C extensions
+static/
 *.so
+media/images/
+tmp/
+.config.py
+passenger_wsgi.py
 
 # Distribution / packaging
 .Python
@@ -81,6 +89,7 @@ target/
 # IPython
 profile_default/
 ipython_config.py
+config.py
 
 # pyenv
 #   For a library or package, you might want to ignore these files since the code is
