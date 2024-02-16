@@ -37,28 +37,12 @@ class Good(Directory):
         null=True,
         default=0
     )
-    price1 = models.DecimalField(
-        verbose_name="Цена",
-        max_digits=15,
-        decimal_places=2,
-        blank=True,
-        null=True,
-        default=0
-    )
-    price2 = models.DecimalField(
-        verbose_name="Цена",
-        max_digits=15,
-        decimal_places=2,
-        blank=True,
-        null=True,
-        default=0
-    )
-    slug = models.SlugField(
+    """slug = models.SlugField(
         max_length=250,
         null=True,
         blank=True,
         unique=True
-    )
+    )"""
     image = models.ForeignKey(
         Image,
         on_delete=models.PROTECT,
@@ -98,15 +82,49 @@ class Good(Directory):
         return GoodsImage.objects.filter(good=self)"""
 
     def save(self, *args, **kwargs) -> None:
-        if not self.slug:
+        """if not self.slug:
             self.slug = slugify(
                 f"{self.name}-{secret_from_string(str(self.id))}"
-            )
+            )"""
         return super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = "Товар"
         verbose_name_plural = "Товары"
+
+
+class PriceKind(Directory):
+    def __str__(self) -> str:
+        return self.name
+
+    class Meta:
+        verbose_name = "Вид цены"
+        verbose_name_plural = "Виды цен"
+
+
+class Price(Base):
+    good = models.ForeignKey(
+        Good,
+        on_delete=models.PROTECT,
+        verbose_name="Номенклатура"
+    )
+    kind = models.ForeignKey(
+        PriceKind,
+        on_delete=models.PROTECT,
+        verbose_name="Вид цены"
+    )
+    price = models.DecimalField(
+        verbose_name="Цена",
+        max_digits=15,
+        decimal_places=2,
+        blank=True,
+        null=True,
+        default=0
+    )
+
+    class Meta:
+        verbose_name = "Цена"
+        verbose_name_plural = "Цены"
 
 
 class GoodsImage(Base):

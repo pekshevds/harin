@@ -24,9 +24,7 @@ def handle_good(good_dir: dir) -> Good:
             id=good_id,
         )
     good.name = good_dir.get('name', good.name)
-    good.price1 = good_dir.get('price1', good.price1)
-    good.price2 = good_dir.get('price2', good.price2)
-    good.code = good_dir.get('price2', good.code)
+    good.code = good_dir.get('code', good.code)
     good.description = good_dir.get('description', good.description)
     good.balance = good_dir.get('balance', good.balance)
     good.art = good_dir.get('art', good.art)

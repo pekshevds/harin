@@ -3,7 +3,9 @@ from django.contrib import admin
 from catalog_app.models import (
     Good,
     GoodsImage,
-    Manufacturer
+    Manufacturer,
+    PriceKind,
+    Price
 )
 
 admin.site.site_header = 'Панель администрирования harin'
@@ -11,9 +13,25 @@ admin.site.site_title = 'Панель администрирования harin'
 admin.site.index_title = 'Добро пожаловать!'
 
 
+@admin.register(PriceKind)
+class PriceKindAdmin(admin.ModelAdmin):
+    list_display = ('__str__', 'id',)
+
+
+@admin.register(Price)
+class PriceAdmin(admin.ModelAdmin):
+    list_display = ('__str__', 'good', 'kind', 'price', 'id',)
+    exclude = ('name',)
+
+
 @admin.register(Manufacturer)
 class ManufacturerAdmin(admin.ModelAdmin):
     list_display = ('__str__', 'id',)
+
+
+class PriceInLine(admin.TabularInline):
+    model = Price
+    fields = ('kind', 'price',)
 
 
 class GoodsImageInLine(admin.TabularInline):
@@ -29,9 +47,10 @@ class GoodsImageInLine(admin.TabularInline):
 
 @admin.register(Good)
 class GoodAdmin(admin.ModelAdmin):
+    inlines = [PriceInLine,]
     list_display = (
         'name', 'art',
-        'is_active', 'balance', 'price1', 'price2', 'preview',
+        'is_active', 'balance', 'preview', 'is_group', 'parent',
     )
     search_fields = ('name', 'art',)
 

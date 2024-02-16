@@ -37,6 +37,7 @@ class Directory(Base):
         max_length=150,
         null=True,
         blank=True,
+        default='',
         db_index=True
     )
     is_group = models.BooleanField(
@@ -48,6 +49,7 @@ class Directory(Base):
         return f"{self.name}"
 
     class Meta:
+        ordering = ('name',)
         abstract = True
 
 

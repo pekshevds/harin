@@ -19,6 +19,7 @@ from catalog_app.services.good import (
 )
 from catalog_app.services.manufacturer import manufacturer_by_id_list
 from catalog_app.services.good import fetch_goods_queryset_by_filters
+from catalog_app.services.update_catalog import update_catalog_from_json
 
 
 class ManufacturerView(APIView):
@@ -94,6 +95,6 @@ class GoodView(APIView):
 
 class UpdateCatalogView(APIView):
     def post(self, request):
-        print(request.data.get("data"))
+        update_catalog_from_json(request.data.get("data"))
         response = {"data": []}
         return Response(response)
