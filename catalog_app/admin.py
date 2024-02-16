@@ -1,27 +1,14 @@
 from django.utils.html import format_html
 from django.contrib import admin
 from catalog_app.models import (
-    Category,
     Good,
     GoodsImage,
-    Model,
-    Manufacturer,
-    Applicability
+    Manufacturer
 )
 
 admin.site.site_header = 'Панель администрирования harin'
 admin.site.site_title = 'Панель администрирования harin'
 admin.site.index_title = 'Добро пожаловать!'
-
-
-@admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'id',)
-
-
-@admin.register(Model)
-class ModelAdmin(admin.ModelAdmin):
-    list_display = ('__str__', 'id',)
 
 
 @admin.register(Manufacturer)
@@ -40,17 +27,11 @@ class GoodsImageInLine(admin.TabularInline):
             return format_html(str)
 
 
-class ApplicabilityInLine(admin.TabularInline):
-    model = Applicability
-    fields = ('model',)
-
-
 @admin.register(Good)
 class GoodAdmin(admin.ModelAdmin):
-    inlines = [GoodsImageInLine, ApplicabilityInLine]
     list_display = (
-        'name', 'art', 'category',
-        'is_active', 'balance', 'price', 'preview',
+        'name', 'art',
+        'is_active', 'balance', 'price1', 'price2', 'preview',
     )
     search_fields = ('name', 'art',)
 

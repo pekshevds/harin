@@ -6,20 +6,6 @@ from image_app.models import Image
 from catalog_app.commons import secret_from_string
 
 
-class Category(Directory):
-
-    class Meta:
-        verbose_name = "Раздел каталога (Код ОКДП2)"
-        verbose_name_plural = "Разделы каталога (Классификатор кодов ОКДП2)"
-
-
-class Model(Directory):
-
-    class Meta:
-        verbose_name = "Модель"
-        verbose_name_plural = "Модели"
-
-
 class Manufacturer(Directory):
 
     class Meta:
@@ -36,6 +22,13 @@ class Good(Directory):
         default="",
         db_index=True
     )
+    code = models.CharField(
+        verbose_name="Код",
+        max_length=11,
+        blank=True,
+        null=True,
+        default=""
+    )
     balance = models.DecimalField(
         verbose_name="Остаток",
         max_digits=15,
@@ -44,7 +37,15 @@ class Good(Directory):
         null=True,
         default=0
     )
-    price = models.DecimalField(
+    price1 = models.DecimalField(
+        verbose_name="Цена",
+        max_digits=15,
+        decimal_places=2,
+        blank=True,
+        null=True,
+        default=0
+    )
+    price2 = models.DecimalField(
         verbose_name="Цена",
         max_digits=15,
         decimal_places=2,
@@ -65,10 +66,10 @@ class Good(Directory):
         blank=True,
         null=True
     )
-    category = models.ForeignKey(
-        Category,
+    parent = models.ForeignKey(
+        "Good",
         on_delete=models.PROTECT,
-        verbose_name="Раздел каталога",
+        verbose_name="Родитель",
         related_name="goods",
         blank=True,
         null=True
@@ -83,6 +84,13 @@ class Good(Directory):
         verbose_name="Производитель",
         blank=True,
         null=True
+    )
+    description = models.CharField(
+        verbose_name="Описание",
+        max_length=1024,
+        blank=True,
+        null=True,
+        default=""
     )
 
     """@property
@@ -120,24 +128,3 @@ class GoodsImage(Base):
     class Meta:
         verbose_name = "Изображение"
         verbose_name_plural = "Изображения товара"
-
-
-class Applicability(Base):
-    good = models.ForeignKey(
-        Good,
-        on_delete=models.PROTECT,
-        verbose_name="Номенклатура",
-        related_name="applicability"
-    )
-    model = models.ForeignKey(
-        Model,
-        on_delete=models.PROTECT,
-        verbose_name="Модель"
-    )
-
-    def __str__(self) -> str:
-        return self.model.name
-
-    class Meta:
-        verbose_name = "Применяемость"
-        verbose_name_plural = "Применяемость"

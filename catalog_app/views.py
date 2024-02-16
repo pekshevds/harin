@@ -7,21 +7,16 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from catalog_app.models import (
     Manufacturer,
-    Model,
-    Category,
     Good
 )
 from catalog_app.serializers import (
     ManufacturerSerializer,
-    ModelSerializer,
-    GoodSerializer,
-    CategorySerializer
+    GoodSerializer
 )
 from catalog_app.services.good import (
     handle_good_list,
     fetch_goods_queryset_by_name_or_article
 )
-from catalog_app.services.category import category_by_id_list
 from catalog_app.services.manufacturer import manufacturer_by_id_list
 from catalog_app.services.good import fetch_goods_queryset_by_filters
 
@@ -38,38 +33,6 @@ class ManufacturerView(APIView):
         else:
             queryset = Manufacturer.objects.all()
             serializer = ManufacturerSerializer(queryset, many=True)
-        response = {"data": serializer.data}
-        return Response(response)
-
-
-class ModelView(APIView):
-
-    permission_classes = [permissions.AllowAny]
-
-    def get(self, request):
-        id = request.GET.get("id", 0)
-        if id:
-            queryset = Model.objects.filter(id=id)
-            serializer = ModelSerializer(queryset, many=True)
-        else:
-            queryset = Model.objects.all()
-            serializer = ModelSerializer(queryset, many=True)
-        response = {"data": serializer.data}
-        return Response(response)
-
-
-class CategoryView(APIView):
-
-    permission_classes = [permissions.AllowAny]
-
-    def get(self, request):
-        id = request.GET.get("id", 0)
-        if id:
-            queryset = Category.objects.filter(id=id)
-            serializer = CategorySerializer(queryset, many=True)
-        else:
-            queryset = Category.objects.all()
-            serializer = CategorySerializer(queryset, many=True)
         response = {"data": serializer.data}
         return Response(response)
 
@@ -93,12 +56,6 @@ class GoodView(APIView):
             if search:
                 queryset = fetch_goods_queryset_by_name_or_article(search)
             else:
-
-                categories = None
-                category_id = request.GET.get("category_id")
-                if category_id:
-                    categories = category_by_id_list(category_id.split(","))
-
                 manufacturers = None
                 manufacturer_id = request.GET.get("manufacturer_id")
                 if manufacturer_id:
@@ -106,7 +63,6 @@ class GoodView(APIView):
                         manufacturer_id.split(",")
                     )
                 queryset = fetch_goods_queryset_by_filters(
-                    categories,
                     manufacturers
                 )
 
@@ -133,4 +89,11 @@ class GoodView(APIView):
             queryset = handle_good_list(good_list=data)
             serializer = GoodSerializer(queryset, many=True)
             response["data"] = serializer.data
+        return Response(response)
+
+
+class UpdateCatalogView(APIView):
+    def post(self, request):
+        print(request.data.get("data"))
+        response = {"data": []}
         return Response(response)

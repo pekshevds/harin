@@ -39,6 +39,10 @@ class Directory(Base):
         blank=True,
         db_index=True
     )
+    is_group = models.BooleanField(
+        verbose_name="Это группа",
+        default=False
+    )
 
     def __str__(self) -> str:
         return f"{self.name}"
