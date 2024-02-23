@@ -25,6 +25,7 @@ class GoodSerializer(serializers.Serializer):
         max_length=11, required=False, allow_blank=True)
     balance = serializers.DecimalField(
         max_digits=15, decimal_places=3, required=False)
+    is_folder = serializers.BooleanField(required=False, allow_null=True)
     parent = ParentGoodSerializer(required=False, allow_null=True)
     manufacturer = ManufacturerSerializer(required=False, allow_null=True)
     preview = ImageSerializer(required=False, allow_null=True,
@@ -42,6 +43,7 @@ class SimpleGoodSerializer(serializers.Serializer):
         max_length=11, required=False, allow_blank=True)
     balance = serializers.DecimalField(
         max_digits=15, decimal_places=3, required=False)
+    is_folder = serializers.BooleanField(required=False, allow_null=True)
     parent_id = serializers.UUIDField(required=False, allow_null=True)
     manufacturer_id = serializers.UUIDField(required=False, allow_null=True)
     preview = ImageSerializer(required=False, allow_null=True,
