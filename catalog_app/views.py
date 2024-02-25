@@ -1,4 +1,3 @@
-from django.core.paginator import Paginator
 from rest_framework import (
     permissions,
     authentication
@@ -14,8 +13,8 @@ from catalog_app.serializers import (
     GoodSerializer
 )
 from catalog_app.services.good import (
-    handle_good_list,
-    fetch_goods_queryset_by_name_or_article
+    fetch_goods_queryset_by_name_or_article,
+    fetch_goods_queryset_by_group
 )
 from catalog_app.services.manufacturer import manufacturer_by_id_list
 from catalog_app.services.good import fetch_goods_queryset_by_filters
@@ -47,12 +46,12 @@ class GoodView(APIView):
         id = request.GET.get("id", 0)
         if id:
             queryset = Good.objects.filter(id=id)
+            good = queryset.first()
+            if good.is_group:
+                queryset = fetch_goods_queryset_by_group(group=good)
             serializer = GoodSerializer(queryset, many=True)
         else:
-            page_number = request.GET.get("page", 1)
-            count = request.GET.get("count", 25)
             queryset = None
-
             search = request.GET.get("search")
             if search:
                 queryset = fetch_goods_queryset_by_name_or_article(search)
@@ -70,26 +69,11 @@ class GoodView(APIView):
             if queryset is None:
                 queryset = Good.objects.all()
 
-            paginator = Paginator(queryset, count)
-            serializer = GoodSerializer(
-                paginator.get_page(page_number), many=True
-            )
+            serializer = GoodSerializer(queryset, many=True)
         response = {
             "data": serializer.data,
             "count": len(queryset)
             }
-        return Response(response)
-
-    def post(self, request):
-        response = {"data": []}
-        data = request.data.get("data", None)
-        if not data:
-            return Response(response)
-        serializer = GoodSerializer(data=data, many=True)
-        if serializer.is_valid(raise_exception=True):
-            queryset = handle_good_list(good_list=data)
-            serializer = GoodSerializer(queryset, many=True)
-            response["data"] = serializer.data
         return Response(response)
 
 

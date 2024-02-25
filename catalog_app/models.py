@@ -1,9 +1,9 @@
 from django.db import models
-from pytils.translit import slugify
+# from pytils.translit import slugify
 from server.base import Base
 from server.base import Directory
 from image_app.models import Image
-from catalog_app.commons import secret_from_string
+# from catalog_app.commons import secret_from_string
 
 
 class Manufacturer(Directory):

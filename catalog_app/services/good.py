@@ -67,6 +67,11 @@ def fetch_goods_queryset_by_manufacturer(manufacturers: List[Manufacturer]):
     return queryset
 
 
+def fetch_goods_queryset_by_group(group: Good):
+    queryset = Good.objects.filter(parent=group).order_by("-is_group", "name")
+    return queryset
+
+
 def fetch_goods_queryset_by_filters(
         manufacturers: List[Manufacturer]
         ):
