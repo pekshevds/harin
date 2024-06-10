@@ -13,6 +13,20 @@ class Manufacturer(Directory):
         verbose_name_plural = "Производители"
 
 
+class Category(Directory):
+    parent = models.ForeignKey(
+        "Category",
+        verbose_name="Родитель",
+        related_name="childs",
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True)
+
+    class Meta:
+        verbose_name = "Категория"
+        verbose_name_plural = "Категории"
+
+
 class Good(Directory):
     art = models.CharField(
         verbose_name="Артикул",
@@ -37,24 +51,16 @@ class Good(Directory):
         null=True,
         default=0
     )
-    """slug = models.SlugField(
+    slug = models.SlugField(
         max_length=250,
         null=True,
         blank=True,
         unique=True
-    )"""
+    )
     image = models.ForeignKey(
         Image,
         on_delete=models.PROTECT,
         verbose_name="Изображение (превью)",
-        blank=True,
-        null=True
-    )
-    parent = models.ForeignKey(
-        "Good",
-        on_delete=models.PROTECT,
-        verbose_name="Родитель",
-        related_name="goods",
         blank=True,
         null=True
     )
@@ -66,6 +72,15 @@ class Good(Directory):
         Manufacturer,
         on_delete=models.PROTECT,
         verbose_name="Производитель",
+        related_name="goods",
+        blank=True,
+        null=True
+    )
+    category = models.ForeignKey(
+        Category,
+        on_delete=models.PROTECT,
+        verbose_name="Категория",
+        related_name="goods",
         blank=True,
         null=True
     )
