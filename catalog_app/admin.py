@@ -26,8 +26,9 @@ class PriceKindAdmin(admin.ModelAdmin):
 
 @admin.register(Price)
 class PriceAdmin(admin.ModelAdmin):
-    list_display = ("__str__", "good", "kind", "price", "id",)
+    list_display = ("__str__", "price", "id",)
     exclude = ("name",)
+    list_filter = ("kind",)
 
 
 @admin.register(Manufacturer)

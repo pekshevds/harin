@@ -137,9 +137,13 @@ class Price(Base):
         default=0
     )
 
+    def __str__(self) -> str:
+        return f"{self.good}-{self.kind}"
+
     class Meta:
-        verbose_name = "Цена"
+        verbose_name = "Запись"
         verbose_name_plural = "Цены"
+        ordering = ["good",]
 
 
 class GoodsImage(Base):
