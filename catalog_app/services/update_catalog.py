@@ -47,7 +47,7 @@ def handle_good(data) -> Good | None:
     if data:
         good = find(goods, data['id'])
         if not good:
-            good = Good.objects.get_or_create(id=data.get("id"))
+            good, _ = Good.objects.get_or_create(id=data.get("id"))
             fill_good_fields(good, data)
             good.save()
             goods.append(good)
@@ -58,7 +58,7 @@ def handle_kind_prices(data) -> PriceKind | None:
     if data:
         kind_price = find(kind_prices, data['id'])
         if not kind_price:
-            kind_price = PriceKind.objects.get_or_create(id=data.get("id"))
+            kind_price, _ = PriceKind.objects.get_or_create(id=data.get("id"))
             fill_kind_price_fields(kind_price, data)
             kind_price.save()
             kind_prices.append(kind_price)
@@ -69,7 +69,7 @@ def handle_manufacturer(data) -> Manufacturer | None:
     if data:
         manufacturer = find(manufacturers, data.get("id"))
         if not manufacturer:
-            manufacturer = Manufacturer.objects.get_or_create(
+            manufacturer, _ = Manufacturer.objects.get_or_create(
                 id=data.get("id"))
             fill_kind_price_fields(manufacturer, data)
             manufacturer.save()
@@ -79,7 +79,7 @@ def handle_manufacturer(data) -> Manufacturer | None:
 
 def handle_price(data, good: Good, kind: PriceKind) -> Price | None:
     if data and good and kind:
-        price = Price.objects.get_or_create(good=good, kind=kind)
+        price, _ = Price.objects.get_or_create(good=good, kind=kind)
         price.price = data.get("price", 0)
         price.save()
         prices.append(price)
