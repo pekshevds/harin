@@ -31,26 +31,15 @@ def update_catalog_from_json(data: List) -> None:
 
 
 def fill_good_fields(good, data) -> None:
-    good.id = data['id']
     good.name = data['name']
     good.art = data['art']
     good.code = data['code']
     good.description = data['description']
     good.balance = data['balance']
     good.manufacturer = handle_manufacturer(data['manufacturer'])
-    good.parent = handle_parent(data['parent'])
-
-
-def fill_parent_fields(good, data) -> None:
-    good.id = data['id']
-    good.name = data['name']
-    good.code = data['code']
-    good.is_group = True
-    good.parent = handle_parent(data['parent'])
 
 
 def fill_kind_price_fields(kind_price, data) -> None:
-    kind_price.id = data['id']
     kind_price.name = data['name']
 
 
@@ -58,9 +47,7 @@ def handle_good(data) -> Good | None:
     if data:
         good = find(goods, data['id'])
         if not good:
-            good = Good.objects.filter(id=data['id']).first()
-            if not good:
-                good = Good()
+            good = Good.objects.get_or_create(id=data.get("id"))
             fill_good_fields(good, data)
             good.save()
             goods.append(good)
@@ -71,9 +58,7 @@ def handle_kind_prices(data) -> PriceKind | None:
     if data:
         kind_price = find(kind_prices, data['id'])
         if not kind_price:
-            kind_price = PriceKind.objects.filter(id=data['id']).first()
-            if not kind_price:
-                kind_price = PriceKind()
+            kind_price = PriceKind.objects.get_or_create(id=data.get("id"))
             fill_kind_price_fields(kind_price, data)
             kind_price.save()
             kind_prices.append(kind_price)
@@ -82,11 +67,10 @@ def handle_kind_prices(data) -> PriceKind | None:
 
 def handle_manufacturer(data) -> Manufacturer | None:
     if data:
-        manufacturer = find(manufacturers, data['id'])
+        manufacturer = find(manufacturers, data.get("id"))
         if not manufacturer:
-            manufacturer = Manufacturer.objects.filter(id=data['id']).first()
-            if not manufacturer:
-                manufacturer = Manufacturer()
+            manufacturer = Manufacturer.objects.get_or_create(
+                id=data.get("id"))
             fill_kind_price_fields(manufacturer, data)
             manufacturer.save()
             manufacturers.append(manufacturer)
@@ -95,22 +79,8 @@ def handle_manufacturer(data) -> Manufacturer | None:
 
 def handle_price(data, good: Good, kind: PriceKind) -> Price | None:
     if data and good and kind:
-        price = Price.objects.filter(good=good, kind=kind).first()
-        if not price:
-            price = Price(good=good, kind=kind)
-        price.price = data['price']
+        price = Price.objects.get_or_create(good=good, kind=kind)
+        price.price = data.get("price", 0)
         price.save()
         prices.append(price)
         return price
-
-
-def handle_parent(data) -> Good | None:
-    if data:
-        parent = Good.objects.filter(id=data['id']).first()
-        if not parent:
-            parent = Good()
-        fill_parent_fields(parent, data)
-        parent.parent = handle_parent(data['parent'])
-        parent.save()
-        parents.append(parent)
-        return parent
