@@ -1,4 +1,5 @@
 from django.db import models
+
 # from pytils.translit import slugify
 from server.base import Base
 from server.base import Directory
@@ -7,6 +8,7 @@ from image_app.models import Image
 
 
 class Manufacturer(Directory):
+    count = models.IntegerField(null=True, blank=True, default=0)
 
     class Meta:
         verbose_name = "Производитель"
@@ -20,7 +22,9 @@ class Category(Directory):
         related_name="childs",
         on_delete=models.PROTECT,
         null=True,
-        blank=True)
+        blank=True,
+    )
+    count = models.IntegerField(null=True, blank=True, default=0)
 
     class Meta:
         verbose_name = "Категория"
@@ -34,14 +38,10 @@ class Good(Directory):
         blank=True,
         null=True,
         default="",
-        db_index=True
+        db_index=True,
     )
     code = models.CharField(
-        verbose_name="Код",
-        max_length=11,
-        blank=True,
-        null=True,
-        default=""
+        verbose_name="Код", max_length=11, blank=True, null=True, default=""
     )
     balance = models.DecimalField(
         verbose_name="Остаток",
@@ -49,32 +49,24 @@ class Good(Directory):
         decimal_places=3,
         blank=True,
         null=True,
-        default=0
+        default=0,
     )
-    slug = models.SlugField(
-        max_length=250,
-        null=True,
-        blank=True,
-        unique=True
-    )
+    slug = models.SlugField(max_length=250, null=True, blank=True, unique=True)
     image = models.ForeignKey(
         Image,
         on_delete=models.PROTECT,
         verbose_name="Изображение (превью)",
         blank=True,
-        null=True
+        null=True,
     )
-    is_active = models.BooleanField(
-        verbose_name="Активен",
-        default=False
-    )
+    is_active = models.BooleanField(verbose_name="Активен", default=False)
     manufacturer = models.ForeignKey(
         Manufacturer,
         on_delete=models.PROTECT,
         verbose_name="Производитель",
         related_name="goods",
         blank=True,
-        null=True
+        null=True,
     )
     category = models.ForeignKey(
         Category,
@@ -82,14 +74,10 @@ class Good(Directory):
         verbose_name="Категория",
         related_name="goods",
         blank=True,
-        null=True
+        null=True,
     )
     description = models.CharField(
-        verbose_name="Описание",
-        max_length=1024,
-        blank=True,
-        null=True,
-        default=""
+        verbose_name="Описание", max_length=1024, blank=True, null=True, default=""
     )
 
     """@property
@@ -98,9 +86,9 @@ class Good(Directory):
 
     def save(self, *args, **kwargs) -> None:
         """if not self.slug:
-            self.slug = slugify(
-                f"{self.name}-{secret_from_string(str(self.id))}"
-            )"""
+        self.slug = slugify(
+            f"{self.name}-{secret_from_string(str(self.id))}"
+        )"""
         return super().save(*args, **kwargs)
 
     class Meta:
@@ -119,14 +107,10 @@ class PriceKind(Directory):
 
 class Price(Base):
     good = models.ForeignKey(
-        Good,
-        on_delete=models.PROTECT,
-        verbose_name="Номенклатура"
+        Good, on_delete=models.PROTECT, verbose_name="Номенклатура"
     )
     kind = models.ForeignKey(
-        PriceKind,
-        on_delete=models.PROTECT,
-        verbose_name="Вид цены"
+        PriceKind, on_delete=models.PROTECT, verbose_name="Вид цены"
     )
     price = models.DecimalField(
         verbose_name="Цена",
@@ -134,7 +118,7 @@ class Price(Base):
         decimal_places=2,
         blank=True,
         null=True,
-        default=0
+        default=0,
     )
 
     def __str__(self) -> str:
@@ -143,7 +127,9 @@ class Price(Base):
     class Meta:
         verbose_name = "Запись"
         verbose_name_plural = "Цены"
-        ordering = ["good",]
+        ordering = [
+            "good",
+        ]
 
 
 class GoodsImage(Base):
@@ -151,12 +137,10 @@ class GoodsImage(Base):
         Good,
         on_delete=models.PROTECT,
         verbose_name="Номенклатура",
-        related_name="images"
+        related_name="images",
     )
     image = models.ForeignKey(
-        Image,
-        on_delete=models.PROTECT,
-        verbose_name="Изображение"
+        Image, on_delete=models.PROTECT, verbose_name="Изображение"
     )
 
     def __str__(self) -> str:
