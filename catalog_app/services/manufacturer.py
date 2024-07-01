@@ -1,30 +1,24 @@
-from typing import List
-from django.db import transaction
+from django.db.models import QuerySet
+from catalog_app.services import (
+    object_by_id,
+    object_by_id_list,
+    handle_object,
+    handle_object_list,
+)
 from catalog_app.models import Manufacturer
 
 
 def manufacturer_by_id(id: str) -> Manufacturer:
-    return Manufacturer.objects.filter(id=id).first()
+    return object_by_id(Manufacturer, id=id)
 
 
-def manufacturer_by_id_list(id: List[str]) -> List[Manufacturer]:
-    return list(Manufacturer.objects.filter(id__in=id))
+def manufacturer_by_id_list(id: list[str]) -> QuerySet:
+    return object_by_id_list(Manufacturer, ids=id)
 
 
 def handle_manufacturer(item_dir: dict) -> Manufacturer:
-    item_id = item_dir.get("id", "")
-    item = manufacturer_by_id(id=item_id)
-    if item is None:
-        item = Manufacturer.objects.create(id=item_id)
-    item.name = item_dir.get("name", item.name)
-    item.save()
-    return item
+    return handle_object(Manufacturer, object_dir=item_dir)
 
 
-def handle_manufacturer_list(item_list: List[dict]) -> List[Manufacturer]:
-    items_id = []
-    with transaction.atomic():
-        for item_dir in item_list:
-            item = handle_manufacturer(item_dir=item_dir)
-            items_id.append(item.id)
-    return Manufacturer.objects.filter(id__in=items_id)
+def handle_manufacturer_list(item_list: list[dict]) -> QuerySet:
+    return handle_object_list(Manufacturer, object_list=item_list)

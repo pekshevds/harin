@@ -1,5 +1,4 @@
 import hashlib
-from typing import List
 from django.http import HttpRequest
 from django.db.models import Q
 from django.db.models import QuerySet
@@ -24,7 +23,7 @@ def fetch_filters(request: HttpRequest) -> list:
     obj_id = request.GET.get("category_id")
     if obj_id:
         categories = category_by_id_list(obj_id.split(","))
-    return [manufacturers, categories]
+    return [categories, manufacturers]
 
 
 def fetch_goods_by_filters(args) -> QuerySet:
@@ -33,7 +32,7 @@ def fetch_goods_by_filters(args) -> QuerySet:
 
 
 def fetch_goods_queryset_by_filters(
-    categories: List[object], manufacturers: List[object]
+    categories: list[object], manufacturers: list[object]
 ) -> QuerySet | None:
     filters = Q()
     condition = Q.AND
