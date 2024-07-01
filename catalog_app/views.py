@@ -106,7 +106,7 @@ class DataView(APIView):
         #     queryset = Good.objects.all()
         filters = fetch_filters_by_goods()
 
-        category = CategorySerializer(Category.objects.all(), many=True)
+        category = CategorySerializer(filters.category, many=True)
         manufacturer = ManufacturerSerializer(filters.manufacturer, many=True)
 
         response = {
