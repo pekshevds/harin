@@ -1,3 +1,5 @@
+from typing import Any
+from dataclasses import dataclass
 from django.db.models import QuerySet
 from catalog_app.models import Category
 from catalog_app.services import (
@@ -6,6 +8,12 @@ from catalog_app.services import (
     handle_object,
     handle_object_list,
 )
+
+
+@dataclass
+class Menu:
+    category: Category
+    items: list[Any] | None
 
 
 def category_by_id(id: str) -> Category:
@@ -22,3 +30,16 @@ def handle_category(category_dir: dict) -> Category:
 
 def handle_category_list(category_list: list[dict]) -> QuerySet:
     return handle_object_list(Category, object_list=category_list)
+
+
+def fetch_menu_by_category() -> list[Menu] | None:
+    submenu1: list[Menu] = list()
+    for subcategory1 in Category.objects.filter(parent=None):
+        submenu2: list[Menu] = list()
+        for subcategory2 in Category.objects.filter(parent=subcategory1):
+            submenu3: list[Menu] = list()
+            for subcategory3 in Category.objects.filter(parent=subcategory2):
+                submenu3.append(Menu(category=subcategory3, items=None))
+            submenu2.append(Menu(category=subcategory2, items=submenu3))
+        submenu1.append(Menu(category=subcategory1, items=submenu2))
+    return submenu1

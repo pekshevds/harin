@@ -8,6 +8,7 @@ from catalog_app.serializers import (
     ManufacturerSerializer,
     GoodSerializer,
     CategorySerializer,
+    Submenu1Serializer,
 )
 from catalog_app.services.good import (
     fetch_goods_queryset_by_name_or_article,
@@ -15,7 +16,7 @@ from catalog_app.services.good import (
 )
 from catalog_app.commons import fetch_goods_by_filters, fetch_filters
 from catalog_app.services.update_catalog import update_catalog_from_json
-from catalog_app.services.update_count_in_filters import fetch_filters_by_goods
+from catalog_app.services.category import fetch_menu_by_category
 
 
 class ManufacturerView(APIView):
@@ -99,18 +100,9 @@ class DataView(APIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request: HttpRequest) -> Response:
-        # Вернуть, если нужно уменьшать количество фильтров
-        # filters = fetch_filters(request)
-        # queryset = fetch_goods_by_filters(filters)
-        # if queryset is None:
-        #     queryset = Good.objects.all()
-        filters = fetch_filters_by_goods()
-
-        category = CategorySerializer(filters.category, many=True)
-        manufacturer = ManufacturerSerializer(filters.manufacturer, many=True)
-
+        menu = Submenu1Serializer(fetch_menu_by_category(), many=True)
         response = {
-            "data": {"category": category.data, "manufacturer": manufacturer.data},
+            "data": {"menu": menu.data},
             "params": request.GET,
             "success": True,
         }

@@ -1,6 +1,6 @@
 from typing import Any
 from django.db import transaction
-from catalog_app.models import Good, Manufacturer, PriceKind, Price, Category
+from catalog_app.models import Good, PriceKind, Price, Category
 
 
 def handle_price_kind(data_item: dict | None) -> PriceKind | None:

@@ -6,7 +6,7 @@ from django.db import transaction
 CatalogModel = type[Model]
 
 
-def object_by_id(_class: CatalogModel, id: str) -> object | None:
+def object_by_id(_class: CatalogModel, id: str) -> CatalogModel | None:
     return _class.objects.filter(id=id).first()
 
 
@@ -14,7 +14,7 @@ def object_by_id_list(_class: CatalogModel, ids: List[str]) -> QuerySet:
     return _class.objects.filter(id__in=ids)
 
 
-def handle_object(_class: CatalogModel, object_dir: dict) -> object | None:
+def handle_object(_class: CatalogModel, object_dir: dict) -> CatalogModel | None:
     key_list = ["name", "comment"]
     obj, created = _class.objects.get_or_create(id=object_dir.get("id"))
     for key in key_list:
