@@ -1,86 +1,51 @@
-from typing import List
+from typing import Any
 from django.db import transaction
-from catalog_app.models import (
-    Good,
-    Manufacturer,
-    PriceKind,
-    Price
-)
-
-goods = []
-kind_prices = []
-manufacturers = []
-prices = []
-parents = []
+from catalog_app.models import Good, Manufacturer, PriceKind, Price, Category
 
 
-def find(_data, key) -> object | None:
-    items = [item for item in _data if item.id == key]
-    if items:
-        return items[0]
-    return None
+def handle_price_kind(data_item: dict | None) -> PriceKind | None:
+    if data_item is None:
+        return None
+    price_kind, _ = PriceKind.objects.get_or_create(id=data_item.get("id"))
+    price_kind.name = data_item.get("name", price_kind.name)
+    price_kind.save()
+    return price_kind
 
 
-def update_catalog_from_json(data: List) -> None:
+def handle_prices(good: Good, data: list[dict[str, Any]] | None) -> None:
+    if data is None:
+        return
+    for data_item in data:
+        price_kind = handle_price_kind(data_item)
+        price, _ = Price.objects.get_or_create(kind=price_kind, good=good)
+        price.price = data_item.get("price", price.price)
+        price.save()
+
+
+def handle_parent(data_item: dict[Any, Any] | None) -> Category | None:
+    if data_item is None:
+        return None
+    category, _ = Category.objects.get_or_create(id=data_item.get("id"))
+    category.name = data_item.get("name", category.name)
+    category.parent = handle_parent(data_item.get("parent"))
+    category.save()
+    return category
+
+
+def handle_good(data_item: dict[Any, Any] | None) -> Good | None:
+    if data_item is None:
+        return None
+    good, _ = Good.objects.get_or_create(id=data_item.get("id"))
+    for field in "name,code,art,description,balance".split(","):
+        setattr(good, field, data_item.get(field, getattr(good, field)))
+    good.category = handle_parent(data_item.get("parent"))
+    good.save()
+    return good
+
+
+def update_catalog_from_json(data: list[dict]) -> None:
     with transaction.atomic():
         for data_item in data:
             good = handle_good(data_item)
-            for price_item in data_item['prices']:
-                kind_price = handle_kind_prices(price_item)
-                handle_price(price_item, good, kind_price)
-
-
-def fill_good_fields(good, data) -> None:
-    good.name = data['name']
-    good.art = data['art']
-    good.code = data['code']
-    good.description = data['description']
-    good.balance = data['balance']
-    good.manufacturer = handle_manufacturer(data['manufacturer'])
-
-
-def fill_kind_price_fields(kind_price, data) -> None:
-    kind_price.name = data['name']
-
-
-def handle_good(data) -> Good | None:
-    if data:
-        good = find(goods, data['id'])
-        if not good:
-            good, _ = Good.objects.get_or_create(id=data.get("id"))
-            fill_good_fields(good, data)
-            good.save()
-            goods.append(good)
-        return good
-
-
-def handle_kind_prices(data) -> PriceKind | None:
-    if data:
-        kind_price = find(kind_prices, data['id'])
-        if not kind_price:
-            kind_price, _ = PriceKind.objects.get_or_create(id=data.get("id"))
-            fill_kind_price_fields(kind_price, data)
-            kind_price.save()
-            kind_prices.append(kind_price)
-        return kind_price
-
-
-def handle_manufacturer(data) -> Manufacturer | None:
-    if data:
-        manufacturer = find(manufacturers, data.get("id"))
-        if not manufacturer:
-            manufacturer, _ = Manufacturer.objects.get_or_create(
-                id=data.get("id"))
-            fill_kind_price_fields(manufacturer, data)
-            manufacturer.save()
-            manufacturers.append(manufacturer)
-        return manufacturer
-
-
-def handle_price(data, good: Good, kind: PriceKind) -> Price | None:
-    if data and good and kind:
-        price, _ = Price.objects.get_or_create(good=good, kind=kind)
-        price.price = data.get("price", 0)
-        price.save()
-        prices.append(price)
-        return price
+            if good:
+                handle_prices(good, data_item.get("prices"))
