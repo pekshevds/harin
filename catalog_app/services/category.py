@@ -34,7 +34,7 @@ def handle_category_list(category_list: list[dict]) -> QuerySet:
 
 def fetch_menu_by_category() -> list[Menu] | None:
     submenu1: list[Menu] = list()
-    for subcategory1 in Category.objects.filter(parent=None):
+    for subcategory1 in Category.objects.filter(parent=None).order_by("name"):
         submenu2: list[Menu] = list()
         for subcategory2 in Category.objects.filter(parent=subcategory1):
             submenu3: list[Menu] = list()
