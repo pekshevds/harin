@@ -36,9 +36,13 @@ def fetch_menu_by_category() -> list[Menu] | None:
     submenu1: list[Menu] = list()
     for subcategory1 in Category.objects.filter(parent=None).order_by("name"):
         submenu2: list[Menu] = list()
-        for subcategory2 in Category.objects.filter(parent=subcategory1):
+        for subcategory2 in Category.objects.filter(parent=subcategory1).order_by(
+            "name"
+        ):
             submenu3: list[Menu] = list()
-            for subcategory3 in Category.objects.filter(parent=subcategory2):
+            for subcategory3 in Category.objects.filter(parent=subcategory2).order_by(
+                "name"
+            ):
                 submenu3.append(Menu(category=subcategory3, items=None))
             submenu2.append(Menu(category=subcategory2, items=submenu3))
         submenu1.append(Menu(category=subcategory1, items=submenu2))
