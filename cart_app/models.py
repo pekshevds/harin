@@ -5,15 +5,13 @@ from catalog_app.models import Good
 
 class Cart(models.Model):
     good = models.ForeignKey(
-        Good,
-        on_delete=models.PROTECT,
-        verbose_name="Номенклатура"
+        Good, on_delete=models.PROTECT, verbose_name="Номенклатура"
     )
     user = models.ForeignKey(
         User,
         on_delete=models.PROTECT,
         verbose_name="Пользователь",
-        related_name="cart_items"
+        related_name="cart_items",
     )
     quantity = models.DecimalField(
         verbose_name="Количество",
@@ -21,7 +19,7 @@ class Cart(models.Model):
         decimal_places=3,
         null=True,
         blank=True,
-        default=1
+        default=0,
     )
 
     def __str__(self) -> str:
