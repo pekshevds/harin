@@ -34,18 +34,12 @@ def user_by_email(email: str):
     return User.objects.filter(email=email).first()
 
 
-def not_used_users_pins(user: User) -> [Pin]:
+def not_used_users_pins(user: User) -> list[Pin]:
     """Возвращает выборку не использовнных пинов пользователя"""
-    return Pin.objects.filter(
-        user=user,
-        use_before__gte=timezone.now(),
-        used=False
-    )
+    return Pin.objects.filter(user=user, use_before__gte=timezone.now(), used=False)
 
 
-def users_pin_by_pin_code(
-        pins: QuerySet,
-        pin_code: str) -> Pin | None:
+def users_pin_by_pin_code(pins: QuerySet, pin_code: str) -> Pin | None:
     """Ищет пин пользователя по пин-коду"""
 
     for pin in pins:
@@ -56,7 +50,7 @@ def users_pin_by_pin_code(
 
 def add_pin(user: User) -> Pin:
     """Генерирует пин-код и добавляет его в список
-     доступных для пользователя user"""
+    доступных для пользователя user"""
     pin = Pin(user=user)
     pin.save()
     return pin
@@ -82,3 +76,11 @@ def update_or_create_user_token(user: User) -> Token | None:
         Token.objects.filter(user=user).delete()
         token = Token.objects.create(user=user)
     return token
+
+
+def create_user(email: str, username: str = "") -> User:
+    if not username:
+        username = email.split("@")[0]
+    user = User.objects.create(email=email, username=username)
+    user.save()
+    return user
