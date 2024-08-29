@@ -5,8 +5,8 @@ from catalog_app.models import (
     Good,
     GoodsImage,
     Manufacturer,
-    PriceKind,
-    Price,
+    # PriceKind,
+    # Price,
 )
 
 admin.site.site_header = "Панель администрирования harin"
@@ -19,15 +19,15 @@ class CategoryKindAdmin(admin.ModelAdmin):
     list_display = ("__str__", "id", "parent")
 
 
-@admin.register(PriceKind)
+"""@admin.register(PriceKind)
 class PriceKindAdmin(admin.ModelAdmin):
     list_display = (
         "__str__",
         "id",
-    )
+    )"""
 
 
-@admin.register(Price)
+"""@admin.register(Price)
 class PriceAdmin(admin.ModelAdmin):
     list_display = (
         "__str__",
@@ -35,7 +35,7 @@ class PriceAdmin(admin.ModelAdmin):
         "id",
     )
     exclude = ("name",)
-    list_filter = ("kind",)
+    list_filter = ("kind",)"""
 
 
 @admin.register(Manufacturer)
@@ -46,12 +46,12 @@ class ManufacturerAdmin(admin.ModelAdmin):
     )
 
 
-class PriceInLine(admin.TabularInline):
+"""class PriceInLine(admin.TabularInline):
     model = Price
     fields = (
         "kind",
         "price",
-    )
+    )"""
 
 
 class GoodsImageInLine(admin.TabularInline):
@@ -70,9 +70,10 @@ class GoodsImageInLine(admin.TabularInline):
 
 @admin.register(Good)
 class GoodAdmin(admin.ModelAdmin):
-    inlines = [
+    """inlines = [
         PriceInLine,
-    ]
+    ]"""
+
     list_display = (
         "name",
         "art",
