@@ -6,7 +6,7 @@ from catalog_app.models import (
     GoodsImage,
     Manufacturer,
     PriceKind,
-    Price
+    Price,
 )
 
 admin.site.site_header = "Панель администрирования harin"
@@ -21,29 +21,45 @@ class CategoryKindAdmin(admin.ModelAdmin):
 
 @admin.register(PriceKind)
 class PriceKindAdmin(admin.ModelAdmin):
-    list_display = ("__str__", "id",)
+    list_display = (
+        "__str__",
+        "id",
+    )
 
 
 @admin.register(Price)
 class PriceAdmin(admin.ModelAdmin):
-    list_display = ("__str__", "price", "id",)
+    list_display = (
+        "__str__",
+        "price",
+        "id",
+    )
     exclude = ("name",)
     list_filter = ("kind",)
 
 
 @admin.register(Manufacturer)
 class ManufacturerAdmin(admin.ModelAdmin):
-    list_display = ("__str__", "id",)
+    list_display = (
+        "__str__",
+        "id",
+    )
 
 
 class PriceInLine(admin.TabularInline):
     model = Price
-    fields = ("kind", "price",)
+    fields = (
+        "kind",
+        "price",
+    )
 
 
 class GoodsImageInLine(admin.TabularInline):
     model = GoodsImage
-    fields = ("image", "preview",)
+    fields = (
+        "image",
+        "preview",
+    )
     readonly_fields = ("preview",)
 
     def preview(self, obj):
@@ -54,13 +70,28 @@ class GoodsImageInLine(admin.TabularInline):
 
 @admin.register(Good)
 class GoodAdmin(admin.ModelAdmin):
-    inlines = [PriceInLine,]
+    inlines = [
+        PriceInLine,
+    ]
     list_display = (
-        "name", "art",
-        "is_active", "balance", "preview", "category", "manufacturer",
+        "name",
+        "art",
+        "is_active",
+        "balance",
+        "price1",
+        "price2",
+        "preview",
+        "category",
+        "manufacturer",
     )
-    search_fields = ("name", "art",)
-    list_filter = ("manufacturer", "category",)
+    search_fields = (
+        "name",
+        "art",
+    )
+    list_filter = (
+        "manufacturer",
+        "category",
+    )
 
     def preview(self, obj):
         if obj.image:

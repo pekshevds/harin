@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from image_app.serializers import ImageSerializer
+from catalog_app.models import Good
 
 
 class ManufacturerSerializer(serializers.Serializer):
@@ -41,6 +42,8 @@ class GoodSerializer(serializers.Serializer):
     art = serializers.CharField(max_length=50, required=False, allow_blank=True)
     code = serializers.CharField(max_length=11, required=False, allow_blank=True)
     balance = serializers.DecimalField(max_digits=15, decimal_places=3, required=False)
+    price1 = serializers.DecimalField(max_digits=15, decimal_places=2, required=False)
+    price2 = serializers.DecimalField(max_digits=15, decimal_places=2, required=False)
     manufacturer = ManufacturerSerializer(required=False, allow_null=True)
     category = CategorySerializer(required=False, allow_null=True)
     preview = ImageSerializer(
@@ -49,6 +52,21 @@ class GoodSerializer(serializers.Serializer):
     images = GoodsImageSerializer(
         required=False, allow_null=True, many=True, read_only=True
     )
+    description = serializers.CharField(
+        max_length=1024, required=False, allow_blank=True
+    )
+
+    def create(self, validated_data):
+        good, _ = Good.objects.get_or_create(id=validated_data.get("id"))
+        good.name = validated_data.get("id", good.name)
+        good.art = validated_data.get("art", good.art)
+        good.code = validated_data.get("code", good.code)
+        good.balance = validated_data.get("balance", good.balance)
+        good.price1 = validated_data.get("price1", good.price1)
+        good.price2 = validated_data.get("price2", good.price2)
+        good.description = validated_data.get("description", good.description)
+        good.save()
+        return good
 
 
 class SimpleGoodSerializer(serializers.Serializer):
@@ -57,6 +75,8 @@ class SimpleGoodSerializer(serializers.Serializer):
     art = serializers.CharField(max_length=50, required=False, allow_blank=True)
     code = serializers.CharField(max_length=11, required=False, allow_blank=True)
     balance = serializers.DecimalField(max_digits=15, decimal_places=3, required=False)
+    price1 = serializers.DecimalField(max_digits=15, decimal_places=2, required=False)
+    price2 = serializers.DecimalField(max_digits=15, decimal_places=2, required=False)
     manufacturer_id = serializers.UUIDField(required=False, allow_null=True)
     category_id = serializers.UUIDField(required=False, allow_null=True)
     preview = ImageSerializer(
@@ -64,4 +84,7 @@ class SimpleGoodSerializer(serializers.Serializer):
     )
     images = GoodsImageSerializer(
         required=False, allow_null=True, many=True, read_only=True
+    )
+    description = serializers.CharField(
+        max_length=1024, required=False, allow_blank=True
     )

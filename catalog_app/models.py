@@ -51,6 +51,22 @@ class Good(Directory):
         null=True,
         default=0,
     )
+    price1 = models.DecimalField(
+        verbose_name="Цена, розничная",
+        max_digits=15,
+        decimal_places=2,
+        blank=True,
+        null=True,
+        default=0,
+    )
+    price2 = models.DecimalField(
+        verbose_name="Цена, оптовая",
+        max_digits=15,
+        decimal_places=2,
+        blank=True,
+        null=True,
+        default=0,
+    )
     slug = models.SlugField(max_length=250, null=True, blank=True, unique=True)
     image = models.ForeignKey(
         Image,
@@ -80,15 +96,7 @@ class Good(Directory):
         verbose_name="Описание", max_length=1024, blank=True, null=True, default=""
     )
 
-    """@property
-    def images(self):
-        return GoodsImage.objects.filter(good=self)"""
-
     def save(self, *args, **kwargs) -> None:
-        """if not self.slug:
-        self.slug = slugify(
-            f"{self.name}-{secret_from_string(str(self.id))}"
-        )"""
         return super().save(*args, **kwargs)
 
     class Meta:

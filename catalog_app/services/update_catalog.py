@@ -36,7 +36,9 @@ def handle_good(data_item: dict[Any, Any] | None) -> Good | None:
     if data_item is None:
         return None
     good, _ = Good.objects.get_or_create(id=data_item.get("id"))
-    for field in "name,code,art,description,balance".split(","):
+    for field in "name,code,art,description,balance,price1,price2,description".split(
+        ","
+    ):
         setattr(good, field, data_item.get(field, getattr(good, field)))
     good.category = handle_parent(data_item.get("parent"))
     good.save()
