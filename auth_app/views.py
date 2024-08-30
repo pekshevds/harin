@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.http import HttpResponse, HttpRequest
 from auth_app.serializers import UserSerializer, UserCreateSerializer
-from auth_app.transport import send_pin_code, fetch_recipient
+from auth_app.transport import send_pin_code, fetch_recipient, send_confirmation_link
 from auth_app.services import (
     add_pin,
     authenticate,
@@ -23,8 +23,16 @@ class UserConfirmationView(APIView):
         if user_id:
             user = user_by_id(user_id)
             if user:
-                activate_user(user)
-                data = "success"
+                if user.is_active:
+                    activate_user(user)
+                    data = "already activated"
+                else:
+                    activate_user(user)
+                    data = "activated"
+            else:
+                data = "user with this user_id does't exist"
+        else:
+            data = "param user_id is empry or does't exist"
         response = {"data": data}
         return Response(response)
 
@@ -35,7 +43,8 @@ class UserView(APIView):
     def post(self, request: HttpRequest) -> HttpResponse:
         serializer = UserCreateSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            serializer.save()
+            user = serializer.save()
+            send_confirmation_link(user.id, user.email)
         response = {"data": serializer.data}
         return Response(response)
 

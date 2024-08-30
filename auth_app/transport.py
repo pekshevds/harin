@@ -1,20 +1,17 @@
 # from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail as send_mail_from_django
 from django.conf import settings
-from auth_app.services import (
-    fetch_find_user_function
-)
+from auth_app.services import fetch_find_user_function
 
 
-def send_sms(subject: str, message: str, recipient_list: []):
+def send_sms(subject: str, message: str, recipient_list: list):
     pass
 
 
-def send_mail(subject: str, message: str, recipient_list: []):
-    send_mail_from_django(subject=subject,
-                          message=message,
-                          from_email=None,
-                          recipient_list=recipient_list)
+def send_mail(subject: str, message: str, recipient_list: list):
+    send_mail_from_django(
+        subject=subject, message=message, from_email=None, recipient_list=recipient_list
+    )
 
 
 def transport_function():
@@ -36,15 +33,17 @@ def recipient_exist(recipient: str):
 
 
 def send_message(subject: str, message: str, recipient: str):
-
     """if not recipient_exist(recipient):
-        raise ObjectDoesNotExist"""
+    raise ObjectDoesNotExist"""
 
     transport = transport_function()
-    transport(subject=subject,
-              message=message,
-              recipient_list=[recipient])
+    transport(subject=subject, message=message, recipient_list=[recipient])
 
 
 def send_pin_code(pin_code: str, recipient: str):
     send_message("auth pin-code", pin_code, recipient)
+
+
+def send_confirmation_link(user_id: str, recipient: str):
+    link = f"https://poliv.annasoft.site/confirmation/?user_id={user_id}"
+    send_message("Для подтверждения пройдите по ссылке", link, recipient)
