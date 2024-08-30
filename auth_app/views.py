@@ -1,6 +1,7 @@
 from rest_framework import permissions, authentication
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.http import HttpResponse, HttpRequest
 from auth_app.serializers import UserSerializer, UserCreateSerializer
 from auth_app.transport import send_pin_code, fetch_recipient
 from auth_app.services import (
@@ -8,13 +9,30 @@ from auth_app.services import (
     authenticate,
     update_or_create_user_token,
     use_pin_code,
+    user_by_id,
+    activate_user,
 )
+
+
+class UserConfirmationView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request: HttpRequest):
+        data = None
+        user_id = request.GET.get("user_id")
+        if user_id:
+            user = user_by_id(user_id)
+            if user:
+                activate_user(user)
+                data = "success"
+        response = {"data": data}
+        return Response(response)
 
 
 class UserView(APIView):
     permission_classes = [permissions.AllowAny]
 
-    def post(self, request):
+    def post(self, request: HttpRequest) -> HttpResponse:
         serializer = UserCreateSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
@@ -26,7 +44,7 @@ class UserInfoView(APIView):
     authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
 
-    def get(self, request):
+    def get(self, request: HttpRequest):
         serializer = UserSerializer([request.user], many=True)
         response = {"data": serializer.data}
         return Response(response)
@@ -41,7 +59,7 @@ class PinView(APIView):
 
     permission_classes = [permissions.AllowAny]
 
-    def get(self, request):
+    def get(self, request: HttpRequest) -> HttpResponse:
         recipient = request.GET.get("recipient")
         if recipient:
             user = fetch_recipient(recipient)
@@ -60,7 +78,7 @@ class TokenView(APIView):
 
     permission_classes = [permissions.AllowAny]
 
-    def post(self, request):
+    def post(self, request: HttpRequest) -> HttpResponse:
         username = request.POST.get("username")
         pincode = request.POST.get("pincode")
         user = authenticate(username, pincode)

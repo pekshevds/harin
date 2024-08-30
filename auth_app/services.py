@@ -26,11 +26,20 @@ def authenticate(username: str, pincode: str) -> User | None:
     return None
 
 
-def user_by_username(username: str):
+def activate_user(user: User) -> None:
+    user.is_active = True
+    user.save()
+
+
+def user_by_username(username: str) -> User | None:
     return User.objects.filter(username=username).first()
 
 
-def user_by_email(email: str):
+def user_by_id(user_id: str) -> User | None:
+    return User.objects.filter(id=user_id).first()
+
+
+def user_by_email(email: str) -> User | None:
     return User.objects.filter(email=email).first()
 
 
@@ -82,5 +91,6 @@ def create_user(email: str, username: str = "") -> User:
     if not username:
         username = email.split("@")[0]
     user = User.objects.create(email=email, username=username)
+    user.is_active = False
     user.save()
     return user

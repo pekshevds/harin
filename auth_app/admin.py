@@ -5,9 +5,13 @@ from auth_app.models import Pin
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
-    list_display = ('__str__',)
+    list_display = (
+        "username",
+        "id",
+        "is_active",
+    )
 
 
 @admin.register(Pin)
 class PinAdmin(admin.ModelAdmin):
-    list_display = ('__str__',)
+    list_display = ("__str__",)
