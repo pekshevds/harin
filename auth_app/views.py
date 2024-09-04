@@ -47,8 +47,9 @@ class UserView(APIView):
             user = serializer.save()
             if not user.is_active:
                 send_confirmation_link(user.id, user.email)
-        response = {"data": serializer.data}
-        return Response(response)
+            response = {"data": serializer.data}
+            return Response(response)
+        return Response({"data": None}, status=status.HTTP_404_NOT_FOUND)
 
 
 class UserInfoView(APIView):
