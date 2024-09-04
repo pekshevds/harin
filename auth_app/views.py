@@ -1,4 +1,5 @@
 from rest_framework import permissions, authentication
+from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.http import HttpResponse, HttpRequest
@@ -44,7 +45,8 @@ class UserView(APIView):
         serializer = UserCreateSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             user = serializer.save()
-            send_confirmation_link(user.id, user.email)
+            if not user.is_active:
+                send_confirmation_link(user.id, user.email)
         response = {"data": serializer.data}
         return Response(response)
 
@@ -75,7 +77,8 @@ class PinView(APIView):
             if user:
                 pin = add_pin(user)
                 send_pin_code(pin.pin_code, recipient)
-        return Response({"data": None})
+                return Response({"data": None})
+        return Response({"data": None}, status=status.HTTP_404_NOT_FOUND)
 
 
 class TokenView(APIView):
@@ -91,9 +94,9 @@ class TokenView(APIView):
         username = request.POST.get("username")
         pincode = request.POST.get("pincode")
         user = authenticate(username, pincode)
-        if user is not None:
+        if user:
             token = update_or_create_user_token(user=user)
             if token is not None:
                 use_pin_code(pincode)
                 return Response({"data": {"token": token.key}})
-        return Response({"data": None})
+        return Response({"data": None}, status=status.HTTP_404_NOT_FOUND)
