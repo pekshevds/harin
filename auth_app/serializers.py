@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from client_app.serializers import ClientSerializer
-from auth_app.services import create_user, user_by_email
+from auth_app.services import create_user
 
 
 class UserSerializer(serializers.Serializer):
@@ -15,9 +15,6 @@ class UserCreateSerializer(serializers.Serializer):
     email = serializers.EmailField()
 
     def create(self, validated_data):
-        user = user_by_email(email=validated_data.get("email"))
-        if user:
-            return user
         user = create_user(
             email=validated_data.get("email"), username=validated_data.get("username")
         )

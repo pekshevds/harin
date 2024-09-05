@@ -44,9 +44,11 @@ class UserView(APIView):
     def post(self, request: HttpRequest) -> HttpResponse:
         serializer = UserCreateSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
-            user = serializer.save()
-            if not user.is_active:
-                send_confirmation_link(user.id, user.email)
+            try:
+                user = serializer.save()
+            except Exception:
+                return Response({"data": None}, status=status.HTTP_400_BAD_REQUEST)
+            send_confirmation_link(user.id, user.email)
             response = {"data": serializer.data}
             return Response(response)
         return Response({"data": None}, status=status.HTTP_404_NOT_FOUND)
