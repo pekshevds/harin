@@ -5,10 +5,15 @@ from client_app.models import Client
 
 class UserInLine(admin.TabularInline):
     model = User
-    fields = ('username',)
+    fields = ("username",)
 
 
 @admin.register(Client)
 class ClientAdmin(admin.ModelAdmin):
     inlines = [UserInLine]
-    list_display = ('name', 'id',)
+    list_display = ("name", "id", "is_reseller", "inn")
+    list_filter = ("is_reseller",)
+    search_fields = (
+        "name",
+        "inn",
+    )

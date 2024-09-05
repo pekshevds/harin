@@ -25,10 +25,10 @@ class UserConfirmationView(APIView):
             user = user_by_id(user_id)
             if user:
                 if user.is_active:
-                    activate_user(user)
                     data = "already activated"
                 else:
                     activate_user(user)
+                    update_or_create_user_token(user)
                     data = "activated"
             else:
                 data = "user with this user_id does't exist"
