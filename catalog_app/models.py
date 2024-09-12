@@ -36,12 +36,12 @@ class Good(Directory):
         verbose_name="Артикул",
         max_length=50,
         blank=True,
-        null=True,
+        null=False,
         default="",
         db_index=True,
     )
     code = models.CharField(
-        verbose_name="Код", max_length=11, blank=True, null=True, default=""
+        verbose_name="Код", max_length=11, blank=True, null=False, default=""
     )
     balance = models.DecimalField(
         verbose_name="Остаток",
@@ -93,7 +93,7 @@ class Good(Directory):
         null=True,
     )
     description = models.CharField(
-        verbose_name="Описание", max_length=1024, blank=True, null=True, default=""
+        verbose_name="Описание", max_length=1024, blank=True, null=False, default=""
     )
 
     def save(self, *args, **kwargs) -> None:

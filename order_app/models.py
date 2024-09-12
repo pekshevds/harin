@@ -14,10 +14,10 @@ class Customer(Directory):
     inn = models.CharField(
         verbose_name="ИНН",
         max_length=12,
-        null=True,
+        null=False,
         blank=True,
         default="",
-        db_index=True
+        db_index=True,
     )
 
     class Meta:
@@ -29,10 +29,10 @@ class Organization(Directory):
     inn = models.CharField(
         verbose_name="ИНН",
         max_length=12,
-        null=True,
+        null=False,
         blank=True,
         default="",
-        db_index=True
+        db_index=True,
     )
 
     class Meta:
@@ -42,31 +42,17 @@ class Organization(Directory):
 
 class Contract(Directory):
     number = models.CharField(
-        verbose_name="Номер",
-        max_length=25,
-        null=True,
-        blank=True
+        verbose_name="Номер", max_length=25, null=True, blank=True, default=""
     )
     date = models.DateField(
-        verbose_name="Дата",
-        null=True,
-        blank=True,
-        default=timezone.now
+        verbose_name="Дата", null=True, blank=True, default=timezone.now
     )
-    client = models.ForeignKey(
-        Client,
-        verbose_name="Клиент",
-        on_delete=models.PROTECT
-    )
+    client = models.ForeignKey(Client, verbose_name="Клиент", on_delete=models.PROTECT)
     customer = models.ForeignKey(
-        Customer,
-        verbose_name="Покупатель",
-        on_delete=models.PROTECT
+        Customer, verbose_name="Покупатель", on_delete=models.PROTECT
     )
     organization = models.ForeignKey(
-        Organization,
-        verbose_name="Организация",
-        on_delete=models.PROTECT
+        Organization, verbose_name="Организация", on_delete=models.PROTECT
     )
 
     def __str__(self) -> str:
@@ -79,39 +65,31 @@ class Contract(Directory):
 
 class Order(Document):
     author = models.ForeignKey(
-        User,
-        verbose_name="Автор",
-        null=True,
-        blank=True,
-        on_delete=models.PROTECT
+        User, verbose_name="Автор", null=True, blank=True, on_delete=models.PROTECT
     )
     contract = models.ForeignKey(
         Contract,
         verbose_name="Договор",
         null=True,
         blank=True,
-        on_delete=models.PROTECT
+        on_delete=models.PROTECT,
     )
     client = models.ForeignKey(
-        Client,
-        verbose_name="Клиент",
-        null=True,
-        blank=True,
-        on_delete=models.PROTECT
+        Client, verbose_name="Клиент", null=True, blank=True, on_delete=models.PROTECT
     )
     customer = models.ForeignKey(
         Customer,
         verbose_name="Покупатель",
         null=True,
         blank=True,
-        on_delete=models.PROTECT
+        on_delete=models.PROTECT,
     )
     organization = models.ForeignKey(
         Organization,
         verbose_name="Организация",
         null=True,
         blank=True,
-        on_delete=models.PROTECT
+        on_delete=models.PROTECT,
     )
 
     def save(self, *args, **kwargs) -> None:
@@ -136,42 +114,21 @@ class Order(Document):
 
 
 class ItemOrder(models.Model):
-    id = models.UUIDField(
-        primary_key=True,
-        default=uuid.uuid4,
-        editable=False
-    )
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     order = models.ForeignKey(
-        Order,
-        on_delete=models.CASCADE,
-        null=True,
-        blank=True,
-        related_name="items"
+        Order, on_delete=models.CASCADE, null=True, blank=True, related_name="items"
     )
-    good = models.ForeignKey(
-        Good,
-        on_delete=models.PROTECT,
-        null=True,
-        blank=True
-    )
+    good = models.ForeignKey(Good, on_delete=models.PROTECT, null=True, blank=True)
     quantity = models.DecimalField(
         verbose_name="Количество",
         max_digits=15,
         decimal_places=3,
         null=True,
-        blank=True
+        blank=True,
     )
     price = models.DecimalField(
-        verbose_name="Цена",
-        max_digits=15,
-        decimal_places=2,
-        null=True,
-        blank=True
+        verbose_name="Цена", max_digits=15, decimal_places=2, null=True, blank=True
     )
     summ = models.DecimalField(
-        verbose_name="Сумма",
-        max_digits=15,
-        decimal_places=2,
-        null=True,
-        blank=True
+        verbose_name="Сумма", max_digits=15, decimal_places=2, null=True, blank=True
     )
