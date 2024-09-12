@@ -2,22 +2,15 @@ from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import permissions, authentication
-from order_app.models import (
-    Contract,
-    Order,
-    ItemOrder
-)
+from order_app.models import Contract, Order, ItemOrder
 from order_app.serializers import (
     ContractSerializer,
     SimpleOrderSerializer,
     OrderSerializer,
     ItemOrderSerializer,
-    SimpleItemOrderSerializer
+    SimpleItemOrderSerializer,
 )
-from order_app.services.order import (
-    handle_order_list,
-    order_by_id
-)
+from order_app.services.order import handle_order_list, order_by_id
 
 
 class ContractView(APIView):
@@ -42,7 +35,10 @@ class OrderView(APIView):
         if order:
             queryset = [order]
         else:
-            queryset = Order.objects.filter(client=client)
+            if client:
+                queryset = Order.objects.filter(client=client)
+            else:
+                queryset = Order.objects.filter(author=request.user)
         serializer = OrderSerializer(queryset, many=True)
         response = {"data": serializer.data}
         return Response(response)
