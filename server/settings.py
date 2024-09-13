@@ -116,6 +116,50 @@ else:
         }
     }
 
+logging_path = BASE_DIR / "logs/"
+if not Path.exists(logging_path):
+    Path.mkdir(logging_path)
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "{levelname} {asctime} {module} {process:d} {thread:d} {message}",
+            "style": "{",
+        },
+        "simple": {
+            "format": "{levelname} {asctime} {message}",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "catalog_app": {
+            "level": "INFO",
+            "class": "logging.FileHandler",
+            "filename": logging_path / "catalog.log",
+            "formatter": "simple",
+        },
+        "order_app": {
+            "level": "INFO",
+            "class": "logging.FileHandler",
+            "filename": logging_path / "order.log",
+            "formatter": "simple",
+        },
+    },
+    "loggers": {
+        "catalog_app.views": {
+            "handlers": ["catalog_app"],
+            "level": "INFO",
+            "propagate": True,
+        },
+        "order_app.views": {
+            "handlers": ["order_app"],
+            "level": "INFO",
+            "propagate": True,
+        },
+    },
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

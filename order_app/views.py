@@ -1,5 +1,7 @@
+import logging
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
+from django.core.paginator import Paginator
 from rest_framework.response import Response
 from rest_framework import permissions, authentication
 from order_app.models import Contract, Order, ItemOrder
@@ -11,6 +13,10 @@ from order_app.serializers import (
     SimpleItemOrderSerializer,
 )
 from order_app.services.order import handle_order_list, order_by_id
+
+default_number_of_page = 1
+item_count_per_page = 5
+logger = logging.getLogger(__name__)
 
 
 class ContractView(APIView):
@@ -32,15 +38,27 @@ class OrderView(APIView):
     def get(self, request):
         client = request.user.client
         order = order_by_id(order_id=request.GET.get("id"))
+        total = 0
         if order:
             queryset = [order]
+            total = len(queryset)
         else:
             if client:
                 queryset = Order.objects.filter(client=client)
             else:
                 queryset = Order.objects.filter(author=request.user)
+            page_number = request.GET.get("page", default_number_of_page)
+            count = request.GET.get("count", item_count_per_page)
+            paginator = Paginator(queryset, count)
+            queryset = paginator.get_page(page_number)
+            total = len(queryset)
         serializer = OrderSerializer(queryset, many=True)
-        response = {"data": serializer.data}
+        response = {
+            "data": serializer.data,
+            "count": len(queryset),
+            "total": total,
+            "success": True,
+        }
         return Response(response)
 
     def post(self, request):
@@ -48,11 +66,13 @@ class OrderView(APIView):
         data = request.data.get("data")
         if not data:
             return Response(response)
+        logger.info({"order_data": data})
         serializer = SimpleOrderSerializer(data=data, many=True)
         if serializer.is_valid(raise_exception=True):
-            queryset = handle_order_list(order_list=data)
+            queryset = handle_order_list(order_list=data, author=request.user)
             serializer = OrderSerializer(queryset, many=True)
             response["data"] = serializer.data
+            response["success"] = True
         return Response(response)
 
 
