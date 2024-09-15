@@ -42,10 +42,10 @@ class Organization(Directory):
 
 class Contract(Directory):
     number = models.CharField(
-        verbose_name="Номер", max_length=25, null=True, blank=True, default=""
+        verbose_name="Номер", max_length=25, null=False, blank=True, default=""
     )
     date = models.DateField(
-        verbose_name="Дата", null=True, blank=True, default=timezone.now
+        verbose_name="Дата", null=False, blank=True, default=timezone.now
     )
     client = models.ForeignKey(Client, verbose_name="Клиент", on_delete=models.PROTECT)
     customer = models.ForeignKey(
