@@ -41,7 +41,7 @@ class OrderView(APIView):
         total = 0
         if order:
             queryset = [order]
-            total = len(queryset)
+            total = len(Order.objects.all())
         else:
             if client:
                 queryset = Order.objects.filter(client=client)
@@ -51,7 +51,7 @@ class OrderView(APIView):
             count = request.GET.get("count", item_count_per_page)
             paginator = Paginator(queryset, count)
             queryset = paginator.get_page(page_number)
-            total = len(queryset)
+            total = len(Order.objects.all())
         serializer = OrderSerializer(queryset, many=True)
         response = {
             "data": serializer.data,
