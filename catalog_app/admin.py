@@ -81,6 +81,7 @@ class GoodAdmin(admin.ModelAdmin):
         "balance",
         "price1",
         "price2",
+        "price3",
         "preview",
         "category",
         "manufacturer",

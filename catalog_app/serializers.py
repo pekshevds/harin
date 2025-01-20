@@ -44,6 +44,7 @@ class GoodSerializer(serializers.Serializer):
     balance = serializers.DecimalField(max_digits=15, decimal_places=3, required=False)
     price1 = serializers.DecimalField(max_digits=15, decimal_places=2, required=False)
     price2 = serializers.DecimalField(max_digits=15, decimal_places=2, required=False)
+    price3 = serializers.DecimalField(max_digits=15, decimal_places=2, required=False)
     manufacturer = ManufacturerSerializer(required=False, allow_null=True)
     category = CategorySerializer(required=False, allow_null=True)
     preview = ImageSerializer(
@@ -64,6 +65,7 @@ class GoodSerializer(serializers.Serializer):
         good.balance = validated_data.get("balance", good.balance)
         good.price1 = validated_data.get("price1", good.price1)
         good.price2 = validated_data.get("price2", good.price2)
+        good.price3 = validated_data.get("price3", good.price3)
         good.description = validated_data.get("description", good.description)
         good.save()
         return good
@@ -77,6 +79,7 @@ class SimpleGoodSerializer(serializers.Serializer):
     balance = serializers.DecimalField(max_digits=15, decimal_places=3, required=False)
     price1 = serializers.DecimalField(max_digits=15, decimal_places=2, required=False)
     price2 = serializers.DecimalField(max_digits=15, decimal_places=2, required=False)
+    price3 = serializers.DecimalField(max_digits=15, decimal_places=2, required=False)
     manufacturer_id = serializers.UUIDField(required=False, allow_null=True)
     category_id = serializers.UUIDField(required=False, allow_null=True)
     preview = ImageSerializer(

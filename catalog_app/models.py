@@ -52,7 +52,7 @@ class Good(Directory):
         default=0,
     )
     price1 = models.DecimalField(
-        verbose_name="Цена, розничная",
+        verbose_name="Розница магазин RUB",
         max_digits=15,
         decimal_places=2,
         blank=True,
@@ -60,7 +60,15 @@ class Good(Directory):
         default=0,
     )
     price2 = models.DecimalField(
-        verbose_name="Цена, оптовая",
+        verbose_name="Опт монтаж RUB",
+        max_digits=15,
+        decimal_places=2,
+        blank=True,
+        null=True,
+        default=0,
+    )
+    price3 = models.DecimalField(
+        verbose_name="Розница прайс RUB",
         max_digits=15,
         decimal_places=2,
         blank=True,
