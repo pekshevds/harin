@@ -14,6 +14,11 @@ class CategorySerializer(serializers.Serializer):
     # parent_id = serializers.UUIDField()
 
 
+class PhraseSerializer(serializers.Serializer):
+    id = serializers.UUIDField()
+    name = serializers.CharField(max_length=150)
+
+
 class Submenu3Serializer(serializers.Serializer):
     category = CategorySerializer()
 
@@ -47,6 +52,7 @@ class GoodSerializer(serializers.Serializer):
     price3 = serializers.DecimalField(max_digits=15, decimal_places=2, required=False)
     manufacturer = ManufacturerSerializer(required=False, allow_null=True)
     category = CategorySerializer(required=False, allow_null=True)
+    phrase = PhraseSerializer(required=False, allow_null=True)
     preview = ImageSerializer(
         required=False, allow_null=True, source="image", read_only=True
     )
@@ -82,6 +88,7 @@ class SimpleGoodSerializer(serializers.Serializer):
     price3 = serializers.DecimalField(max_digits=15, decimal_places=2, required=False)
     manufacturer_id = serializers.UUIDField(required=False, allow_null=True)
     category_id = serializers.UUIDField(required=False, allow_null=True)
+    phrase_id = serializers.UUIDField(required=False, allow_null=True)
     preview = ImageSerializer(
         required=False, allow_null=True, source="image", read_only=True
     )

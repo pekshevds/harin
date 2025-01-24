@@ -31,6 +31,15 @@ class Category(Directory):
         verbose_name_plural = "Категории"
 
 
+class Phrase(Directory):
+    def __str__(self) -> str:
+        return self.name
+
+    class Meta:
+        verbose_name = "Фраза"
+        verbose_name_plural = "Фразы для замены нулевого количества"
+
+
 class Good(Directory):
     art = models.CharField(
         verbose_name="Артикул",
@@ -96,6 +105,14 @@ class Good(Directory):
         Category,
         on_delete=models.PROTECT,
         verbose_name="Категория",
+        related_name="goods",
+        blank=True,
+        null=True,
+    )
+    phrase = models.ForeignKey(
+        Phrase,
+        on_delete=models.PROTECT,
+        verbose_name="Фраза для замены пустого количества",
         related_name="goods",
         blank=True,
         null=True,

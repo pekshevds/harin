@@ -5,6 +5,7 @@ from catalog_app.models import (
     Good,
     GoodsImage,
     Manufacturer,
+    Phrase,
     # PriceKind,
     # Price,
 )
@@ -40,6 +41,14 @@ class PriceAdmin(admin.ModelAdmin):
 
 @admin.register(Manufacturer)
 class ManufacturerAdmin(admin.ModelAdmin):
+    list_display = (
+        "__str__",
+        "id",
+    )
+
+
+@admin.register(Phrase)
+class PhraseAdmin(admin.ModelAdmin):
     list_display = (
         "__str__",
         "id",
