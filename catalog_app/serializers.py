@@ -62,6 +62,9 @@ class GoodSerializer(serializers.Serializer):
     description = serializers.CharField(
         max_length=1024, required=False, allow_blank=True
     )
+    description_html = serializers.CharField(
+        max_length=1024, required=False, allow_blank=True
+    )
 
     def create(self, validated_data):
         good, _ = Good.objects.get_or_create(id=validated_data.get("id"))
@@ -96,5 +99,8 @@ class SimpleGoodSerializer(serializers.Serializer):
         required=False, allow_null=True, many=True, read_only=True
     )
     description = serializers.CharField(
+        max_length=1024, required=False, allow_blank=True
+    )
+    description_html = serializers.CharField(
         max_length=1024, required=False, allow_blank=True
     )

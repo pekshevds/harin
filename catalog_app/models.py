@@ -121,6 +121,13 @@ class Good(Directory):
         verbose_name="Описание", max_length=1024, blank=True, null=False, default=""
     )
 
+    @property
+    def description_html(self):
+        description = ""
+        for line in self.description.split("\n"):
+            description += f"<p>{line}</p>"
+        return description
+
     def save(self, *args, **kwargs) -> None:
         return super().save(*args, **kwargs)
 
