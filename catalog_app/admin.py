@@ -79,9 +79,52 @@ class GoodsImageInLine(admin.TabularInline):
 
 @admin.register(Good)
 class GoodAdmin(admin.ModelAdmin):
-    """inlines = [
-        PriceInLine,
-    ]"""
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": (
+                    "name",
+                    (
+                        "art",
+                        "code",
+                    ),
+                    "is_active",
+                )
+            },
+        ),
+        (
+            "Цены",
+            {
+                "fields": (
+                    (
+                        "price1",
+                        "price2",
+                        "price3",
+                    )
+                )
+            },
+        ),
+        (
+            None,
+            {
+                "fields": (
+                    (
+                        "balance",
+                        "phrase",
+                    ),
+                    "category",
+                    "manufacturer",
+                    (
+                        "image",
+                        "preview",
+                    ),
+                    "description",
+                    "comment",
+                )
+            },
+        ),
+    )
 
     list_display = (
         "name",
@@ -103,10 +146,12 @@ class GoodAdmin(admin.ModelAdmin):
         "manufacturer",
         "category",
     )
+    readonly_fields = ("preview",)
 
     def preview(self, obj):
         if obj.image:
-            str = f"<img src={obj.image.image.url} style='max-height: 75px;'>"
+            str = f"'<img src={obj.image.image.url} style='max-height: 75px;'>"
             return format_html(str)
+        return ""
 
     preview.short_description = "Изображение (превью)"
