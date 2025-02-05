@@ -32,6 +32,8 @@ ALLOWED_HOSTS = [
     "localhost",
     "back.harin.annasoft.site",
     "www.back.harin.annasoft.site",
+    "backend.magazin-poliva1.ru",
+    "www.backend.magazin-poliva1.ru",
 ]
 
 
@@ -91,7 +93,7 @@ WSGI_APPLICATION = "server.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-TESTING = True
+TESTING = False
 
 if TESTING:
     DATABASES = {
@@ -210,10 +212,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = "static/"
-STATIC_ROOT = BASE_DIR / "static/"
+STATIC_ROOT = BASE_DIR / "public/static/"
 
 MEDIA_URL = "media/"
-MEDIA_ROOT = BASE_DIR / "media/"
+MEDIA_ROOT = BASE_DIR / "public/media/"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
