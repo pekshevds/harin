@@ -99,8 +99,8 @@ class SimpleGoodSerializer(serializers.Serializer):
         required=False, allow_null=True, many=True, read_only=True
     )
     description = serializers.CharField(
-        max_length=1024, required=False, allow_blank=True
+        max_length=2048, required=False, allow_blank=True
     )
     description_html = serializers.CharField(
-        max_length=1024, required=False, allow_blank=True
+        max_length=2048, required=False, allow_blank=True
     )

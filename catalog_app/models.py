@@ -118,7 +118,7 @@ class Good(Directory):
         null=True,
     )
     description = models.CharField(
-        verbose_name="Описание", max_length=1024, blank=True, null=False, default=""
+        verbose_name="Описание", max_length=2048, blank=True, null=False, default=""
     )
 
     @property
