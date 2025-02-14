@@ -19,6 +19,7 @@ def handle_order(order_dict: dict, author: None | User) -> Order:
     order, _ = Order.objects.get_or_create(id=order_id)
     if _:
         order.author = author
+        order.client = author.client if author else None
         changed = True
     key_name = "items"
     if key_name in order_dict:
