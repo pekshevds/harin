@@ -93,7 +93,7 @@ WSGI_APPLICATION = "server.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-TESTING = config.TESTING
+TESTING = True
 
 if TESTING:
     DATABASES = {
@@ -243,6 +243,7 @@ EMAIL_HOST_USER = config.EMAIL_HOST_USER
 EMAIL_HOST_PASSWORD = config.EMAIL_HOST_PASSWORD
 EMAIL_USE_TLS = config.EMAIL_USE_TLS
 EMAIL_USE_SSL = config.EMAIL_USE_SSL
+DEFAULT_FROM_EMAIL = config.EMAIL_HOST_USER
 
 
 class SEND_MESSAGE_TYPE_CHOICES(Enum):
