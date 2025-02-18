@@ -1,3 +1,4 @@
+import config
 from django.core.mail import send_mail as send_mail_from_django
 from django.conf import settings
 from auth_app.services import fetch_find_user_function
@@ -44,5 +45,5 @@ def send_pin_code(pin_code: str, recipient: str):
 
 
 def send_confirmation_link(user_id: str, recipient: str):
-    link = f"https://poliv.annasoft.site/confirmation/?user_id={user_id}"
+    link = f"https://{config.CONFIRMATION_LINK}/confirmation/?user_id={user_id}"
     send_message("Для подтверждения пройдите по ссылке", link, recipient)
