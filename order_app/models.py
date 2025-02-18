@@ -92,6 +92,10 @@ class Order(Document):
         on_delete=models.PROTECT,
     )
 
+    uploaded_at = models.DateTimeField(
+        verbose_name="Дата загрузки в 1С", null=True, blank=True
+    )
+
     def save(self, *args, **kwargs) -> None:
         if not self.number:
             self.number = ganerate_new_number(model=Order)

@@ -8,21 +8,40 @@ from order_app.models import ItemOrder
 
 @admin.register(Customer)
 class CustomerAdmin(admin.ModelAdmin):
-    list_display = ('name', 'inn', 'id',)
+    list_display = (
+        "name",
+        "inn",
+        "id",
+    )
 
 
 @admin.register(Organization)
 class OrganizationAdmin(admin.ModelAdmin):
-    list_display = ('name', 'inn', 'id',)
+    list_display = (
+        "name",
+        "inn",
+        "id",
+    )
 
 
 @admin.register(Contract)
 class ContractAdmin(admin.ModelAdmin):
-    list_display = ('name', 'number', 'date',
-                    'client', 'customer', 'organization', 'id',)
-    search_fields = ('number',)
-    list_filter = ('client', 'customer', 'organization',)
-    date_hierarchy = 'date'
+    list_display = (
+        "name",
+        "number",
+        "date",
+        "client",
+        "customer",
+        "organization",
+        "id",
+    )
+    search_fields = ("number",)
+    list_filter = (
+        "client",
+        "customer",
+        "organization",
+    )
+    date_hierarchy = "date"
 
 
 class ItemOrderInLine(admin.TabularInline):
@@ -32,9 +51,30 @@ class ItemOrderInLine(admin.TabularInline):
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     inlines = [ItemOrderInLine]
-    list_display = ('__str__', 'number', 'date', 'contract',
-                    'client', 'customer', 'organization',
-                    'author', 'comment', 'id',)
-    search_fields = ('number',)
-    list_filter = ('client', 'customer', 'organization', 'author',)
+    list_display = (
+        "__str__",
+        "number",
+        "date",
+        "contract",
+        "client",
+        "customer",
+        "organization",
+        "author",
+        "comment",
+        "id",
+        "uploaded",
+    )
+    search_fields = ("number",)
+    list_filter = (
+        "client",
+        "customer",
+        "organization",
+        "author",
+    )
     # date_hierarchy = 'date'
+    readonly_fields = ("uploaded",)
+
+    def uploaded(self, obj) -> bool:
+        return obj.uploaded_at is not None
+
+    uploaded.short_description = "Загружен в 1С"
