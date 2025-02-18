@@ -1,14 +1,13 @@
-# from django.core.exceptions import ObjectDoesNotExist
 from django.core.mail import send_mail as send_mail_from_django
 from django.conf import settings
 from auth_app.services import fetch_find_user_function
 
 
-def send_sms(subject: str, message: str, recipient_list: list):
+def send_sms(subject: str, message: str, recipient_list: list[str]):
     pass
 
 
-def send_mail(subject: str, message: str, recipient_list: list):
+def send_mail(subject: str, message: str, recipient_list: list[str]):
     send_mail_from_django(
         subject=subject, message=message, from_email=None, recipient_list=recipient_list
     )
