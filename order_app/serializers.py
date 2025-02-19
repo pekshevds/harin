@@ -64,6 +64,9 @@ class OrderSerializer(serializers.Serializer):
     contract = ContractSerializer()
     items = ItemOrderSerializer(many=True)
     author = AuthorSerializer()
+    uploaded_at = serializers.DateTimeField(
+        format="%Y-%m-%d", read_only=True, required=False
+    )
 
 
 class SimpleOrderSerializer(serializers.Serializer):
@@ -71,3 +74,6 @@ class SimpleOrderSerializer(serializers.Serializer):
     date = serializers.DateTimeField(format="%Y-%m-%d", read_only=True, required=False)
     contract_id = serializers.UUIDField(required=False)
     items = SimpleItemOrderSerializer(many=True, required=False)
+    uploaded_at = serializers.DateTimeField(
+        format="%Y-%m-%d", read_only=True, required=False
+    )
