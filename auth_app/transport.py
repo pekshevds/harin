@@ -41,7 +41,7 @@ def send_message(subject: str, message: str, recipient: str):
 
 
 def send_pin_code(pin_code: str, recipient: str):
-    send_message("auth pin-code", pin_code, recipient)
+    send_message(f"Auth pin-code for {config.CONFIRMATION_LINK}", pin_code, recipient)
 
 
 def send_confirmation_link(user_id: str, recipient: str):
