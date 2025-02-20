@@ -13,11 +13,14 @@ def send_notification(
 ) -> HttpResponse:
     if not recipient_list:
         return Response(
-            {"data": {"message": "empty recipient list"}}, status=status.HTTP_200_OK
+            {"data": {"message": "empty recipient list"}},
+            status=status.HTTP_400_BAD_REQUEST,
         )
     ds = DataSerializer(data=data)
     if not ds.is_valid():
-        return Response({"data": {"message": "bad data"}}, status=status.HTTP_200_OK)
+        return Response(
+            {"data": {"message": "bad data"}}, status=status.HTTP_400_BAD_REQUEST
+        )
 
     message = f"""Имя {ds.validated_data.get("name", "")}
         Почта {ds.validated_data.get("email", "")}
