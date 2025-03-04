@@ -6,6 +6,7 @@ from client_app.serializers import ClientSerializer
 class AuthorSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=150, required=False, allow_null=True)
     email = serializers.EmailField()
+    is_reseller = serializers.BooleanField(required=False, allow_null=True)
 
 
 class CustomerSerializer(serializers.Serializer):

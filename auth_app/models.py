@@ -28,6 +28,7 @@ class User(AbstractUser):
         on_delete=models.PROTECT,
         related_name="users",
     )
+    is_reseller = models.BooleanField(verbose_name="Это оптовик", default=False)
     email = models.EmailField(_("email address"), blank=False, unique=True)
 
     class Meta:
