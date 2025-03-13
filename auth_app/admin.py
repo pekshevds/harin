@@ -10,6 +10,7 @@ class UserAdmin(admin.ModelAdmin):
         "id",
         "is_active",
     )
+    search_fields = ("username",)
 
 
 @admin.register(Pin)
