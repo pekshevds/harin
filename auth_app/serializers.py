@@ -8,6 +8,7 @@ class UserSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=150, required=False, allow_null=True)
     email = serializers.EmailField()
     is_active = serializers.BooleanField(required=False, allow_null=True)
+    is_reseller = serializers.BooleanField(required=False, allow_null=True)
 
 
 class UserCreateSerializer(serializers.Serializer):
