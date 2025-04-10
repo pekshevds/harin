@@ -5,6 +5,29 @@ from django.db.models import QuerySet
 from catalog_app.services.manufacturer import manufacturer_by_id_list
 from catalog_app.services.category import category_by_id_list
 from catalog_app.models import Good
+from yml_catalog import YmlCatalog, Category, Offer
+from django.conf import settings
+
+
+def update_yml_catalog_xml() -> None:
+    yml_catalog = YmlCatalog(
+        "catalog", "magazin-poliva1", "https://shop.magazin-poliva1.ru/", "site"
+    )
+    queryset = Good.objects.all()
+    categories = []
+    offers = []
+    for good in queryset:
+        offers.append(
+            Offer(str(good.id), good.name, good.image.image.url if good.image else "")
+        )
+        category = Category(
+            str(good.category.id), str(good.category.parent.id), good.category.name
+        )
+        if category not in categories:
+            categories.append(category)
+    yml_catalog.load_categories(categories)
+    yml_catalog.load_offers(offers)
+    yml_catalog.save_to_file(settings.STATIC_ROOT / "yml_catalog.xml")
 
 
 def secret_from_string(string: str) -> str:

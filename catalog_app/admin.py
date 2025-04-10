@@ -9,6 +9,7 @@ from catalog_app.models import (
     # PriceKind,
     # Price,
 )
+from catalog_app.commons import update_yml_catalog_xml
 
 admin.site.site_header = "Панель администрирования harin"
 admin.site.site_title = "Панель администрирования harin"

@@ -1,7 +1,9 @@
 from rest_framework import permissions, authentication
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from django.http import HttpRequest
+from django.views import View
+from django.http import HttpRequest, HttpResponse
+from django.shortcuts import redirect
 from django.core.paginator import Paginator
 from catalog_app.models import Manufacturer, Good, Category
 from catalog_app.serializers import (
@@ -17,6 +19,7 @@ from catalog_app.services.good import (
 from catalog_app.commons import fetch_goods_by_filters, fetch_filters
 from catalog_app.services.update_catalog import update_catalog_from_json
 from catalog_app.services.category import fetch_menu_by_category
+from catalog_app.commons import update_yml_catalog_xml
 
 
 class ManufacturerView(APIView):
@@ -114,3 +117,11 @@ class UpdateCatalogView(APIView):
         update_catalog_from_json(request.data.get("data"))
         response = {"data": []}
         return Response(response)
+
+
+class UpdateYmlCatalog(View):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request: HttpRequest) -> HttpResponse:
+        update_yml_catalog_xml()
+        return redirect("/admin/catalog_app/good/")
