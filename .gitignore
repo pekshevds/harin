@@ -6,6 +6,9 @@ __pycache__/
 # command files
 *.bat
 
+# yandex catalog
+yml_catalog.xml
+
 # C extensions
 static/
 *.so
