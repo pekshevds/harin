@@ -20,14 +20,17 @@ def update_yml_catalog_xml() -> None:
         offers.append(
             Offer(str(good.id), good.name, good.image.image.url if good.image else "")
         )
-        category = Category(
-            str(good.category.id), str(good.category.parent.id), good.category.name
-        )
-        if category not in categories:
-            categories.append(category)
+        if good.category:
+            category = Category(
+                str(good.category.id),
+                str(good.category.parent.id) if good.category.parent else "",
+                good.category.name,
+            )
+            if category not in categories:
+                categories.append(category)
     yml_catalog.load_categories(categories)
     yml_catalog.load_offers(offers)
-    yml_catalog.save_to_file(settings.MEDIA_ROOT / "yml_catalog.xml")
+    yml_catalog.save_to_file(settings.STATIC_ROOT / "yml_catalog.xml")
 
 
 def secret_from_string(string: str) -> str:
