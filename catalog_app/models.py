@@ -6,6 +6,8 @@ from server.base import Directory
 from image_app.models import Image
 # from catalog_app.commons import secret_from_string
 
+params: dict[str, str] = {"name": "name", "category": "category", "price1": "price"}
+
 
 class Manufacturer(Directory):
     count = models.IntegerField(null=True, blank=True, default=0)
@@ -120,6 +122,42 @@ class Good(Directory):
     description = models.CharField(
         verbose_name="Описание", max_length=2048, blank=True, null=False, default=""
     )
+    seo_title = models.TextField(
+        verbose_name="<title>", null=True, blank=True, default=""
+    )
+    seo_description = models.TextField(
+        verbose_name="<description>",
+        null=True,
+        blank=True,
+        default="",
+    )
+    seo_keywords = models.TextField(
+        verbose_name="<keywords>",
+        null=True,
+        blank=True,
+        default="",
+    )
+
+    @property
+    def seo_cleaned_title(self):
+        result = self.seo_title
+        for key, value in params.items():
+            result = result.replace(f"[{value}]", str(getattr(self, key)))
+        return result
+
+    @property
+    def seo_cleaned_description(self):
+        result = self.seo_description
+        for key, value in params.items():
+            result = result.replace(f"[{value}]", str(getattr(self, key)))
+        return result
+
+    @property
+    def seo_cleaned_keywords(self):
+        result = self.seo_keywords
+        for key, value in params.items():
+            result = result.replace(f"[{value}]", str(getattr(self, key)))
+        return result
 
     @property
     def description_html(self):

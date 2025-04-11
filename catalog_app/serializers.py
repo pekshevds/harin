@@ -65,6 +65,15 @@ class GoodSerializer(serializers.Serializer):
     description_html = serializers.CharField(
         max_length=1024, required=False, allow_blank=True
     )
+    seo_cleaned_title = serializers.CharField(
+        max_length=2048, required=False, allow_blank=True
+    )
+    seo_cleaned_description = serializers.CharField(
+        max_length=2048, required=False, allow_blank=True
+    )
+    seo_cleaned_keywords = serializers.CharField(
+        max_length=2048, required=False, allow_blank=True
+    )
 
     def create(self, validated_data):
         good, _ = Good.objects.get_or_create(id=validated_data.get("id"))
@@ -102,5 +111,14 @@ class SimpleGoodSerializer(serializers.Serializer):
         max_length=2048, required=False, allow_blank=True
     )
     description_html = serializers.CharField(
+        max_length=2048, required=False, allow_blank=True
+    )
+    seo_cleaned_title = serializers.CharField(
+        max_length=2048, required=False, allow_blank=True
+    )
+    seo_cleaned_description = serializers.CharField(
+        max_length=2048, required=False, allow_blank=True
+    )
+    seo_cleaned_keywords = serializers.CharField(
         max_length=2048, required=False, allow_blank=True
     )
