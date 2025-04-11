@@ -1,7 +1,5 @@
 {% extends "admin/change_list.html" %}
 {% load static %}
-
-
     {% block object-tools-items %}
     <li>
       <a href="{% url 'update-yml-catalog' %}" class="addlink">
@@ -9,7 +7,7 @@
       </a>
     </li>
     <li>
-      <a href="{% static 'yml_catalog.xml' %}" class="addlink">
+      <a href="{{ yml_catalog_url }}" download class="addlink">
         Скачать yml_catalog.xml
       </a>
     </li>

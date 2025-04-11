@@ -30,7 +30,7 @@ def update_yml_catalog_xml() -> None:
                 categories.append(category)
     yml_catalog.load_categories(categories)
     yml_catalog.load_offers(offers)
-    yml_catalog.save_to_file(settings.STATIC_ROOT / "yml_catalog.xml")
+    yml_catalog.save_to_file(settings.MEDIA_ROOT / "yml_catalog.xml")
 
 
 def secret_from_string(string: str) -> str:
