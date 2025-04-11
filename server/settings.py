@@ -254,3 +254,5 @@ class SEND_MESSAGE_TYPE_CHOICES(Enum):
 
 
 SEND_MESSAGE_TYPE = SEND_MESSAGE_TYPE_CHOICES.EMAIL
+BACKEND_DOMAIN = "https://backend.magazin-poliva1.ru"
+FRONTEND_DOMAIN = "https://shop.magazin-poliva1.ru"

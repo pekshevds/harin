@@ -10,8 +10,9 @@ from django.conf import settings
 
 
 def update_yml_catalog_xml() -> None:
-    url = "https://shop.magazin-poliva1.ru/"
-    yml_catalog = YmlCatalog("catalog", "magazin-poliva1", url, "site")
+    yml_catalog = YmlCatalog(
+        "catalog", "magazin-poliva1", settings.FRONTEND_DOMAIN, "site"
+    )
     queryset = Good.objects.all()
     categories = []
     offers = []
@@ -21,7 +22,7 @@ def update_yml_catalog_xml() -> None:
                 id=str(good.id),
                 categoryId=str(good.category.id) if good.category else "",
                 name=good.name,
-                url=f"{url}catalog/good/{str(good.id)}/",
+                url=f"{settings.FRONTEND_DOMAIN}/catalog/good/{str(good.id)}/",
                 price=str(good.price1),
                 currencyId="RUB",
                 delivery="true",
@@ -29,7 +30,9 @@ def update_yml_catalog_xml() -> None:
                 store="false",
                 description=f"<![CDATA[ {good.description_html} ]]>",
                 model=good.name,
-                picture=good.image.image.url if good.image else "",
+                picture=f"{settings.BACKEND_DOMAIN}{good.image.image.url}"
+                if good.image
+                else "",
             )
         )
         if good.category:
