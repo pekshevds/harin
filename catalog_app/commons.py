@@ -10,15 +10,27 @@ from django.conf import settings
 
 
 def update_yml_catalog_xml() -> None:
-    yml_catalog = YmlCatalog(
-        "catalog", "magazin-poliva1", "https://shop.magazin-poliva1.ru/", "site"
-    )
+    url = "https://shop.magazin-poliva1.ru/"
+    yml_catalog = YmlCatalog("catalog", "magazin-poliva1", url, "site")
     queryset = Good.objects.all()
     categories = []
     offers = []
     for good in queryset:
         offers.append(
-            Offer(str(good.id), good.name, good.image.image.url if good.image else "")
+            Offer(
+                id=str(good.id),
+                categoryId=str(good.category.id) if good.category else "",
+                name=good.name,
+                url=f"{url}catalog/good/{str(good.id)}/",
+                price=str(good.price1),
+                currencyId="RUB",
+                delivery="true",
+                pickup="true",
+                store="false",
+                description=f"<![CDATA[ {good.description_html} ]]>",
+                model=good.name,
+                picture=good.image.image.url if good.image else "",
+            )
         )
         if good.category:
             category = Category(

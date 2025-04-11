@@ -13,7 +13,16 @@ class Category:
 @dataclass
 class Offer:
     id: str
+    categoryId: str
     name: str
+    url: str
+    price: str
+    currencyId: str
+    delivery: str
+    pickup: str
+    store: str
+    description: str
+    model: str
     picture: str
 
 
@@ -25,8 +34,14 @@ class YmlCatalog:
         self.__company = self.__init_company(text=company)
         self.__url = self.__init_url(text=url)
         self.__platform = self.__init_platform(text=platform)
+        self.__currencies = self.__init_currencies()
         self.__categories = etree.SubElement(self.__shop, "categories")
         self.__offers = etree.SubElement(self.__shop, "offers")
+
+    def __init_currencies(self) -> Any:
+        currencies = etree.SubElement(self.__shop, "currencies")
+        etree.SubElement(currencies, "currency", attrib={"id": "RUB", "rate": "1"})
+        return currencies
 
     def __init_name(self, text: str) -> Any:
         element = etree.SubElement(self.__shop, "name")
@@ -61,6 +76,13 @@ class YmlCatalog:
             )
             category.text = _.text
 
+    def __fill_sub_items(self, offer: Any, data: Offer) -> None:
+        for item_name in vars(data).keys():
+            if item_name == "id":
+                continue
+            item = etree.SubElement(offer, item_name)
+            item.text = getattr(data, item_name)
+
     def load_offers(self, offers: list[Offer]) -> None:
         for _ in offers:
             attrib = {"id": _.id}
@@ -69,9 +91,14 @@ class YmlCatalog:
                 "offer",
                 attrib=attrib,
             )
-            name = etree.SubElement(offer, "name")
-            name.text = _.name
+            self.__fill_sub_items(offer, _)
 
     def save_to_file(self, file_name: str = "yml_catalog.xml") -> None:
         doc = etree.ElementTree(self.__yml_catalog)
-        doc.write(file_name, pretty_print=True, xml_declaration=True, encoding="utf-8")
+        doc.write(
+            file_name,
+            pretty_print=True,
+            xml_declaration=True,
+            encoding="utf-8",
+            method="xml",
+        )
