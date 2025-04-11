@@ -28,8 +28,9 @@ def update_yml_catalog_xml() -> None:
                 delivery="true",
                 pickup="true",
                 store="false",
-                description=f"<![CDATA[ {good.description_html} ]]>",
+                description=f"{good.description}",
                 model=good.name,
+                vendor=good.manufacturer.name if good.manufacturer else "",
                 picture=f"{settings.BACKEND_DOMAIN}{good.image.image.url}"
                 if good.image
                 else "",

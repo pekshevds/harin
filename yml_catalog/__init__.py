@@ -23,6 +23,7 @@ class Offer:
     store: str
     description: str
     model: str
+    vendor: str
     picture: str
 
 
