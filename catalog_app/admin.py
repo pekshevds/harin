@@ -125,6 +125,18 @@ class GoodAdmin(admin.ModelAdmin):
                 )
             },
         ),
+        (
+            "CEO",
+            {
+                "fields": (
+                    (
+                        "seo_title",
+                        "seo_description",
+                        "seo_keywords",
+                    )
+                )
+            },
+        ),
     )
 
     list_display = (
