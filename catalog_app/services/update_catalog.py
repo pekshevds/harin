@@ -27,6 +27,7 @@ def handle_parent(data_item: dict[Any, Any] | None) -> Category | None:
         return None
     category, _ = Category.objects.get_or_create(id=data_item.get("id"))
     category.name = data_item.get("name", category.name)
+    category.code = data_item.get("code", category.code)
     category.parent = handle_parent(data_item.get("parent"))
     category.save()
     return category

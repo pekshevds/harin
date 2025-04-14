@@ -18,6 +18,9 @@ class Manufacturer(Directory):
 
 
 class Category(Directory):
+    code = models.CharField(
+        verbose_name="Код", max_length=11, blank=True, null=False, default=""
+    )
     parent = models.ForeignKey(
         "Category",
         verbose_name="Родитель",
@@ -27,6 +30,36 @@ class Category(Directory):
         blank=True,
     )
     count = models.IntegerField(null=True, blank=True, default=0)
+    seo_title = models.TextField(
+        verbose_name="<title>", null=True, blank=True, default=""
+    )
+    seo_description = models.TextField(
+        verbose_name="<description>",
+        null=True,
+        blank=True,
+        default="",
+    )
+    seo_keywords = models.TextField(
+        verbose_name="<keywords>",
+        null=True,
+        blank=True,
+        default="",
+    )
+
+    @property
+    def seo_cleaned_title(self):
+        result = self.seo_title
+        return result
+
+    @property
+    def seo_cleaned_description(self):
+        result = self.seo_description
+        return result
+
+    @property
+    def seo_cleaned_keywords(self):
+        result = self.seo_keywords
+        return result
 
     class Meta:
         verbose_name = "Категория"

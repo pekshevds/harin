@@ -11,6 +11,7 @@ class ManufacturerSerializer(serializers.Serializer):
 class CategorySerializer(serializers.Serializer):
     id = serializers.UUIDField()
     name = serializers.CharField(max_length=150)
+    code = serializers.CharField(max_length=11, required=False, allow_blank=True)
     # parent_id = serializers.UUIDField()
 
 

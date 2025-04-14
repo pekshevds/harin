@@ -9,7 +9,6 @@ from catalog_app.models import (
     # PriceKind,
     # Price,
 )
-from catalog_app.commons import update_yml_catalog_xml
 
 admin.site.site_header = "Панель администрирования harin"
 admin.site.site_title = "Панель администрирования harin"
@@ -18,26 +17,37 @@ admin.site.index_title = "Добро пожаловать!"
 
 @admin.register(Category)
 class CategoryKindAdmin(admin.ModelAdmin):
-    list_display = ("__str__", "id", "parent")
-
-
-"""@admin.register(PriceKind)
-class PriceKindAdmin(admin.ModelAdmin):
-    list_display = (
-        "__str__",
-        "id",
-    )"""
-
-
-"""@admin.register(Price)
-class PriceAdmin(admin.ModelAdmin):
-    list_display = (
-        "__str__",
-        "price",
-        "id",
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": (
+                    "name",
+                    "parent",
+                    "code",
+                    "comment",
+                )
+            },
+        ),
+        (
+            "CEO",
+            {
+                "fields": (
+                    (
+                        "seo_title",
+                        "seo_description",
+                        "seo_keywords",
+                    )
+                )
+            },
+        ),
     )
-    exclude = ("name",)
-    list_filter = ("kind",)"""
+    list_display = (
+        "__str__",
+        "id",
+        "parent",
+        "code",
+    )
 
 
 @admin.register(Manufacturer)
@@ -54,14 +64,6 @@ class PhraseAdmin(admin.ModelAdmin):
         "__str__",
         "id",
     )
-
-
-"""class PriceInLine(admin.TabularInline):
-    model = Price
-    fields = (
-        "kind",
-        "price",
-    )"""
 
 
 class GoodsImageInLine(admin.TabularInline):
