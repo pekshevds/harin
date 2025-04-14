@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
             model_name="user",
             name="password",
             field=models.CharField(
-                default="pbkdf2_sha256$260000$NfJfaJEdcc4Ru5l5xgXrfW$uAzlMXvyy8b3GHJSSXwDT3mgnRc1vLF248/sZvFTlfQ=",
+                default="pbkdf2_sha256$260000$lFT1QcWza9SCmn5MjWklRj$oAx9jsO87LIuDi4hCxaZM4Bi9Fc1L6c4d7SP1FWlem0=",
                 max_length=128,
                 verbose_name="password",
             ),
