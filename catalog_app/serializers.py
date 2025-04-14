@@ -13,6 +13,15 @@ class CategorySerializer(serializers.Serializer):
     name = serializers.CharField(max_length=150)
     code = serializers.CharField(max_length=11, required=False, allow_blank=True)
     # parent_id = serializers.UUIDField()
+    seo_cleaned_title = serializers.CharField(
+        max_length=2048, required=False, allow_blank=True
+    )
+    seo_cleaned_description = serializers.CharField(
+        max_length=2048, required=False, allow_blank=True
+    )
+    seo_cleaned_keywords = serializers.CharField(
+        max_length=2048, required=False, allow_blank=True
+    )
 
 
 class PhraseSerializer(serializers.Serializer):
