@@ -19,8 +19,8 @@ def update_yml_catalog_xml() -> None:
     for good in queryset:
         offers.append(
             Offer(
-                id=str(good.id),
-                categoryId=str(good.category.id) if good.category else "",
+                id=good.code,
+                categoryId=good.category.code if good.category else "",
                 name=good.name,
                 url=f"{settings.FRONTEND_DOMAIN}/catalog/good/{str(good.id)}/",
                 price=str(good.price1),
@@ -38,8 +38,8 @@ def update_yml_catalog_xml() -> None:
         )
         if good.category:
             category = Category(
-                str(good.category.id),
-                str(good.category.parent.id) if good.category.parent else "",
+                good.category.code,
+                good.category.parent.code if good.category.parent else "",
                 good.category.name,
             )
             if category not in categories:
