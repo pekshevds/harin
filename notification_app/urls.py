@@ -3,6 +3,7 @@ from notification_app.views import (
     ProjectOrderView,
     OrderInstallationView,
     OnlineTrainingView,
+    RequestWholesalePricesView,
     ForDevelopersView,
 )
 
@@ -16,5 +17,10 @@ urlpatterns = [
         name="order-installation",
     ),
     path("online-training/", OnlineTrainingView.as_view(), name="online-training"),
+    path(
+        "request-wholesale-prices/",
+        RequestWholesalePricesView.as_view(),
+        name="request-wholesale-prices",
+    ),
     path("for-developers/", ForDevelopersView.as_view(), name="for-developers"),
 ]

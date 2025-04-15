@@ -58,6 +58,15 @@ class OnlineTrainingView(APIView):
         )
 
 
+class RequestWholesalePricesView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request: HttpRequest) -> HttpResponse:
+        return send_notification(
+            "Запросить опт. Цены", request.data.get("data"), get_recipient_list()
+        )
+
+
 class ForDevelopersView(APIView):
     permission_classes = [permissions.AllowAny]
 
