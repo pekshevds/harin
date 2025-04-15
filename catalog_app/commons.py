@@ -19,11 +19,11 @@ def update_yml_catalog_xml() -> None:
     for good in queryset:
         offers.append(
             Offer(
-                id=good.code,
-                categoryId=good.category.code if good.category else "",
+                id=clean_code(good.code),
+                categoryId=clean_code(good.category.code) if good.category else "",
                 name=good.name,
                 url=f"{settings.FRONTEND_DOMAIN}/catalog/good/{str(good.id)}/",
-                price=str(good.price1),
+                price=str(int(good.price1)),
                 currencyId="RUB",
                 delivery="true",
                 pickup="true",
@@ -38,8 +38,8 @@ def update_yml_catalog_xml() -> None:
         )
         if good.category:
             category = Category(
-                good.category.code,
-                good.category.parent.code if good.category.parent else "",
+                clean_code(good.category.code),
+                clean_code(good.category.parent.code) if good.category.parent else "",
                 good.category.name,
             )
             if category not in categories:
@@ -47,6 +47,23 @@ def update_yml_catalog_xml() -> None:
     yml_catalog.load_categories(categories)
     yml_catalog.load_offers(offers)
     yml_catalog.save_to_file(settings.MEDIA_ROOT / "yml_catalog.xml")
+
+
+def clean_code(code: str) -> str:
+    words = code.split("-")
+    if len(words) == 2:
+        right = words[1]
+        try:
+            int_code = int(right)
+        except ValueError:
+            return code
+        return str(int_code)
+    else:
+        try:
+            int_code = int(code)
+        except ValueError:
+            return code
+        return str(int_code)
 
 
 def secret_from_string(string: str) -> str:
