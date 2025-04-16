@@ -5,8 +5,35 @@ from django.db.models import QuerySet
 from catalog_app.services.manufacturer import manufacturer_by_id_list
 from catalog_app.services.category import category_by_id_list
 from catalog_app.models import Good
+from catalog_app.models import Category as CategoryModel
 from yml_catalog import YmlCatalog, Category, Offer
 from django.conf import settings
+from const_app.commons import fetch_current_consts
+
+
+def fill_seo_category_defaults() -> None:
+    current_consts = fetch_current_consts()
+    if current_consts:
+        CategoryModel.objects.all().update(
+            seo_title=current_consts.seo_title_category,
+            seo_description=current_consts.seo_description_category,
+            seo_keywords=current_consts.seo_keywords_category,
+        )
+
+
+def fill_seo_good_defaults() -> None:
+    current_consts = fetch_current_consts()
+    if current_consts:
+        Good.objects.all().update(
+            seo_title=current_consts.seo_title_good,
+            seo_description=current_consts.seo_description_good,
+            seo_keywords=current_consts.seo_keywords_good,
+        )
+
+
+def fill_seo_defaults() -> None:
+    fill_seo_category_defaults()
+    fill_seo_good_defaults()
 
 
 def update_yml_catalog_xml() -> None:

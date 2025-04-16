@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     "wish_list_app.apps.WishListAppConfig",
     "client_app.apps.ClientAppConfig",
     "notification_app.apps.NotificationAppConfig",
+    "const_app.apps.ConstAppConfig",
 ]
 
 MIDDLEWARE = [

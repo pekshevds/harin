@@ -4,7 +4,16 @@ from django.db import models
 from server.base import Base
 from server.base import Directory
 from image_app.models import Image
+
 # from catalog_app.commons import secret_from_string
+from const_app.commons import (
+    fetch_seo_title_category,
+    fetch_seo_description_category,
+    fetch_seo_keywords_category,
+    fetch_seo_title_good,
+    fetch_seo_description_good,
+    fetch_seo_keywords_good,
+)
 
 params: dict[str, str] = {"name": "name", "category": "category", "price1": "price"}
 
@@ -31,19 +40,19 @@ class Category(Directory):
     )
     count = models.IntegerField(null=True, blank=True, default=0)
     seo_title = models.TextField(
-        verbose_name="<title>", null=True, blank=True, default=""
+        verbose_name="<title>", null=True, blank=True, default=fetch_seo_title_category
     )
     seo_description = models.TextField(
         verbose_name="<description>",
         null=True,
         blank=True,
-        default="",
+        default=fetch_seo_description_category,
     )
     seo_keywords = models.TextField(
         verbose_name="<keywords>",
         null=True,
         blank=True,
-        default="",
+        default=fetch_seo_keywords_category,
     )
 
     @property
@@ -156,19 +165,19 @@ class Good(Directory):
         verbose_name="Описание", max_length=2048, blank=True, null=False, default=""
     )
     seo_title = models.TextField(
-        verbose_name="<title>", null=True, blank=True, default=""
+        verbose_name="<title>", null=True, blank=True, default=fetch_seo_title_good
     )
     seo_description = models.TextField(
         verbose_name="<description>",
         null=True,
         blank=True,
-        default="",
+        default=fetch_seo_description_good,
     )
     seo_keywords = models.TextField(
         verbose_name="<keywords>",
         null=True,
         blank=True,
-        default="",
+        default=fetch_seo_keywords_good,
     )
 
     @property
