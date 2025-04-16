@@ -9,10 +9,22 @@ from catalog_app.models import (
     # PriceKind,
     # Price,
 )
+from const_app.commons import fetch_current_consts
 
 admin.site.site_header = "Панель администрирования harin"
 admin.site.site_title = "Панель администрирования harin"
 admin.site.index_title = "Добро пожаловать!"
+
+
+@admin.action(description="Заполнить SEO по умолчанию")
+def fill_seo_category_defaults(modeladmin, request, queryset):
+    current_consts = fetch_current_consts()
+    if current_consts:
+        queryset.update(
+            seo_title=current_consts.seo_title_category,
+            seo_description=current_consts.seo_description_category,
+            seo_keywords=current_consts.seo_keywords_category,
+        )
 
 
 @admin.register(Category)
@@ -48,6 +60,7 @@ class CategoryKindAdmin(admin.ModelAdmin):
         "parent",
         "code",
     )
+    actions = [fill_seo_category_defaults]
 
 
 @admin.register(Manufacturer)
@@ -78,6 +91,17 @@ class GoodsImageInLine(admin.TabularInline):
         if obj.image:
             str = f"<img src={obj.image.image.url} style='max-height: 75px;'>"
             return format_html(str)
+
+
+@admin.action(description="Заполнить SEO по умолчанию")
+def fill_seo_good_defaults(modeladmin, request, queryset):
+    current_consts = fetch_current_consts()
+    if current_consts:
+        queryset.update(
+            seo_title=current_consts.seo_title_good,
+            seo_description=current_consts.seo_description_good,
+            seo_keywords=current_consts.seo_keywords_good,
+        )
 
 
 @admin.register(Good)
@@ -162,6 +186,8 @@ class GoodAdmin(admin.ModelAdmin):
         "category",
     )
     readonly_fields = ("preview",)
+
+    actions = [fill_seo_good_defaults]
 
     def preview(self, obj):
         if obj.image:
