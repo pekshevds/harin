@@ -96,6 +96,9 @@ class Good(Directory):
     code = models.CharField(
         verbose_name="Код", max_length=11, blank=True, null=False, default=""
     )
+    okei = models.CharField(
+        verbose_name="Ед.", max_length=50, blank=True, null=False, default=""
+    )
     balance = models.DecimalField(
         verbose_name="Остаток",
         max_digits=15,

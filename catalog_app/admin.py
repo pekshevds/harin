@@ -115,6 +115,7 @@ class GoodAdmin(admin.ModelAdmin):
                     (
                         "art",
                         "code",
+                        "okei",
                     ),
                     "is_active",
                 )
@@ -168,6 +169,8 @@ class GoodAdmin(admin.ModelAdmin):
     list_display = (
         "name",
         "art",
+        "code",
+        "okei",
         "is_active",
         "balance",
         "price1",
