@@ -58,16 +58,23 @@ class Category(Directory):
     @property
     def seo_cleaned_title(self):
         result = self.seo_title
+
+        for key, value in params.items():
+            result = result.replace(f"[{value}]", str(getattr(self, key, "")))
         return result
 
     @property
     def seo_cleaned_description(self):
         result = self.seo_description
+        for key, value in params.items():
+            result = result.replace(f"[{value}]", str(getattr(self, key, "")))
         return result
 
     @property
     def seo_cleaned_keywords(self):
         result = self.seo_keywords
+        for key, value in params.items():
+            result = result.replace(f"[{value}]", str(getattr(self, key, "")))
         return result
 
     class Meta:
@@ -187,21 +194,21 @@ class Good(Directory):
     def seo_cleaned_title(self):
         result = self.seo_title
         for key, value in params.items():
-            result = result.replace(f"[{value}]", str(getattr(self, key)))
+            result = result.replace(f"[{value}]", str(getattr(self, key, "")))
         return result
 
     @property
     def seo_cleaned_description(self):
         result = self.seo_description
         for key, value in params.items():
-            result = result.replace(f"[{value}]", str(getattr(self, key)))
+            result = result.replace(f"[{value}]", str(getattr(self, key, "")))
         return result
 
     @property
     def seo_cleaned_keywords(self):
         result = self.seo_keywords
         for key, value in params.items():
-            result = result.replace(f"[{value}]", str(getattr(self, key)))
+            result = result.replace(f"[{value}]", str(getattr(self, key, "")))
         return result
 
     @property
