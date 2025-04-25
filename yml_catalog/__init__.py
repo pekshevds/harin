@@ -17,12 +17,14 @@ class Offer:
     name: str
     url: str
     price: str
+    oldprice: str
     currencyId: str
     delivery: str
     pickup: str
     store: str
     description: str
     model: str
+    vendorCode: str
     vendor: str
     picture: str
 

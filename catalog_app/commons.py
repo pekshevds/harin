@@ -51,6 +51,7 @@ def update_yml_catalog_xml() -> None:
                 name=good.name,
                 url=f"{settings.FRONTEND_DOMAIN}/catalog/good/{str(good.id)}/",
                 price=str(int(good.price1)),
+                oldprice=str(int(good.price3)),
                 currencyId="RUB",
                 delivery="true",
                 pickup="true",
@@ -58,6 +59,7 @@ def update_yml_catalog_xml() -> None:
                 description=f"{good.description}",
                 model=good.name,
                 vendor=good.manufacturer.name if good.manufacturer else "",
+                vendorCode=good.manufacturer.id if good.manufacturer else "",
                 picture=f"{settings.BACKEND_DOMAIN}{good.image.image.url}"
                 if good.image
                 else "",
