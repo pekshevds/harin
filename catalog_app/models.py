@@ -15,7 +15,12 @@ from const_app.commons import (
     fetch_seo_keywords_good,
 )
 
-params: dict[str, str] = {"name": "name", "category": "category", "price1": "price"}
+params: dict[str, str] = {
+    "name": "name",
+    "category": "category",
+    "price1": "price",
+    "art": "art",
+}
 
 
 class Manufacturer(Directory):
@@ -58,7 +63,6 @@ class Category(Directory):
     @property
     def seo_cleaned_title(self):
         result = self.seo_title
-
         for key, value in params.items():
             result = result.replace(f"[{value}]", str(getattr(self, key, "")))
         return result

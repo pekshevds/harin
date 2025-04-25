@@ -59,7 +59,7 @@ def update_yml_catalog_xml() -> None:
                 description=f"{good.description}",
                 model=good.name,
                 vendor=good.manufacturer.name if good.manufacturer else "",
-                vendorCode=good.manufacturer.id if good.manufacturer else "",
+                vendorCode=good.art,
                 picture=f"{settings.BACKEND_DOMAIN}{good.image.image.url}"
                 if good.image
                 else "",
