@@ -79,6 +79,24 @@ class OrderView(APIView):
         return Response(response)
 
 
+class OrderWithoutAuthorView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        response = {"data": []}
+        data = request.data.get("data")
+        if not data:
+            return Response(response)
+        logger.info({"order_data": data})
+        serializer = SimpleOrderSerializer(data=data, many=True)
+        if serializer.is_valid(raise_exception=True):
+            queryset = handle_order_list(order_list=data, author=None)
+            serializer = OrderSerializer(queryset, many=True)
+            response["data"] = serializer.data
+            response["success"] = True
+        return Response(response)
+
+
 class OrderDeleteView(APIView):
     authentication_classes = [authentication.TokenAuthentication]
     permission_classes = [permissions.IsAuthenticated]
