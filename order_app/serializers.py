@@ -78,3 +78,15 @@ class SimpleOrderSerializer(serializers.Serializer):
     uploaded_at = serializers.DateTimeField(
         format="%Y-%m-%d", read_only=True, required=False
     )
+
+
+class SimpleOrderWithoutClientSerializer(serializers.Serializer):
+    number = serializers.IntegerField(read_only=True, required=False)
+    date = serializers.DateTimeField(format="%Y-%m-%d", read_only=True, required=False)
+    name = serializers.CharField(max_length=150, required=False)
+    email = serializers.EmailField(required=False)
+    phone = serializers.CharField(max_length=255, required=False)
+    items = SimpleItemOrderSerializer(many=True, required=False)
+    uploaded_at = serializers.DateTimeField(
+        format="%Y-%m-%d", read_only=True, required=False
+    )

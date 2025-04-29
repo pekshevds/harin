@@ -14,6 +14,7 @@ from order_app.serializers import (
     OrderSerializer,
     ItemOrderSerializer,
     SimpleItemOrderSerializer,
+    SimpleOrderWithoutClientSerializer,
 )
 from order_app.services.order import handle_order_list, order_by_id
 
@@ -88,7 +89,7 @@ class OrderWithoutAuthorView(APIView):
         if not data:
             return Response(response)
         logger.info({"order_data": data})
-        serializer = SimpleOrderSerializer(data=data, many=True)
+        serializer = SimpleOrderWithoutClientSerializer(data=data, many=True)
         if serializer.is_valid(raise_exception=True):
             queryset = handle_order_list(order_list=data, author=None)
             serializer = OrderSerializer(queryset, many=True)
