@@ -20,6 +20,7 @@ def handle_order(order_dict: dict, author: None | User) -> Order:
     if _:
         order.author = author
         order.client = author.client if author else None
+        order.comment = f"{order_dict.get('name', '')}, {order_dict.get('email', '')}, {order_dict.get('phone', '')}"
         changed = True
     key_name = "items"
     if key_name in order_dict:

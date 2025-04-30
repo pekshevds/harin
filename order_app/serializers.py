@@ -68,6 +68,7 @@ class OrderSerializer(serializers.Serializer):
     uploaded_at = serializers.DateTimeField(
         format="%Y-%m-%d", read_only=True, required=False
     )
+    comment = serializers.CharField(max_length=None, required=False)
 
 
 class SimpleOrderSerializer(serializers.Serializer):
@@ -78,6 +79,7 @@ class SimpleOrderSerializer(serializers.Serializer):
     uploaded_at = serializers.DateTimeField(
         format="%Y-%m-%d", read_only=True, required=False
     )
+    comment = serializers.CharField(max_length=None, required=False)
 
 
 class SimpleOrderWithoutClientSerializer(serializers.Serializer):
@@ -90,3 +92,4 @@ class SimpleOrderWithoutClientSerializer(serializers.Serializer):
     uploaded_at = serializers.DateTimeField(
         format="%Y-%m-%d", read_only=True, required=False
     )
+    comment = serializers.CharField(max_length=None, required=False)
