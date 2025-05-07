@@ -14,4 +14,5 @@ urlpatterns = [
         "notification/", include("notification_app.urls", namespace="notification_app")
     ),
     path("api-token-auth/", views.obtain_auth_token),
+    path("page/", include("pages_app.urls", namespace="pages_app")),
 ]

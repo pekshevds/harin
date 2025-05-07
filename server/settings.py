@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     "client_app.apps.ClientAppConfig",
     "notification_app.apps.NotificationAppConfig",
     "const_app.apps.ConstAppConfig",
+    "pages_app.apps.PagesAppConfig",
 ]
 
 MIDDLEWARE = [
