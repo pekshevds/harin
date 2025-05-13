@@ -33,15 +33,29 @@ def handle_parent(data_item: dict[Any, Any] | None) -> Category | None:
     return category
 
 
+def _fetch_required_fields() -> list[str]:
+    fields = []
+    fields.append("name")
+    fields.append("code")
+    fields.append("okei")
+    fields.append("art")
+    fields.append("description")
+    fields.append("balance")
+    fields.append("price1")
+    fields.append("price2")
+    fields.append("price3")
+    fields.append("weight")
+    fields.append("length")
+    fields.append("width")
+    fields.append("height")
+    return fields
+
+
 def handle_good(data_item: dict[Any, Any] | None) -> Good | None:
     if data_item is None:
         return None
     good, _ = Good.objects.get_or_create(id=data_item.get("id"))
-    for field in (
-        "name,code,okei,art,description,balance,price1,price2,price3,description".split(
-            ","
-        )
-    ):
+    for field in _fetch_required_fields():
         setattr(good, field, data_item.get(field, getattr(good, field)))
     good.category = handle_parent(data_item.get("parent"))
     good.save()

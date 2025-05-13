@@ -153,6 +153,19 @@ class GoodAdmin(admin.ModelAdmin):
             },
         ),
         (
+            "Физические параметры",
+            {
+                "fields": (
+                    (
+                        "weight",
+                        "length",
+                        "width",
+                        "height",
+                    )
+                )
+            },
+        ),
+        (
             "CEO",
             {
                 "fields": (

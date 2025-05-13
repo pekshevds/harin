@@ -142,6 +142,38 @@ class Good(Directory):
         null=True,
         default=0,
     )
+    weight = models.DecimalField(
+        verbose_name="Вес, кг",
+        max_digits=15,
+        decimal_places=3,
+        blank=True,
+        null=True,
+        default=0,
+    )
+    length = models.DecimalField(
+        verbose_name="Длина, м",
+        max_digits=15,
+        decimal_places=3,
+        blank=True,
+        null=True,
+        default=0,
+    )
+    width = models.DecimalField(
+        verbose_name="Ширина, м",
+        max_digits=15,
+        decimal_places=3,
+        blank=True,
+        null=True,
+        default=0,
+    )
+    height = models.DecimalField(
+        verbose_name="Высота, м",
+        max_digits=15,
+        decimal_places=3,
+        blank=True,
+        null=True,
+        default=0,
+    )
     slug = models.SlugField(max_length=250, null=True, blank=True, unique=True)
     image = models.ForeignKey(
         Image,
