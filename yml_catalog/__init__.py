@@ -27,6 +27,7 @@ class Offer:
     vendorCode: str
     vendor: str
     picture: str
+    available: str
 
 
 class YmlCatalog:

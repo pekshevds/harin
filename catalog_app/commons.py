@@ -63,6 +63,7 @@ def update_yml_catalog_xml() -> None:
                 picture=f"{settings.BACKEND_DOMAIN}{good.image.image.url}"
                 if good.image
                 else "",
+                available="true" if good.balance > 0 else "false",
             )
         )
         if good.category:
