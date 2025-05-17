@@ -3,7 +3,10 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.http import HttpResponse, HttpRequest
-from auth_app.serializers import UserSerializer, UserCreateSerializer
+from auth_app.serializers import (
+    UserSerializer,
+    UserCreateSerializer,
+)
 from auth_app.transport import send_pin_code, fetch_recipient, send_confirmation_link
 from auth_app.services import (
     add_pin,

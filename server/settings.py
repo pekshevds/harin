@@ -12,6 +12,12 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from enum import Enum
 from pathlib import Path
+from cdek import (
+    CDEKAuth,
+    CDEKToken,
+    fetch_fake_client_id,
+    fetch_fake_client_secret,
+)
 import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -258,3 +264,8 @@ class SEND_MESSAGE_TYPE_CHOICES(Enum):
 SEND_MESSAGE_TYPE = SEND_MESSAGE_TYPE_CHOICES.EMAIL
 BACKEND_DOMAIN = "https://backend.magazin-poliva1.ru"
 FRONTEND_DOMAIN = "https://shop.magazin-poliva1.ru"
+
+# СДЕК
+CDEK_TOKEN = CDEKToken(
+    CDEKAuth(client_id=fetch_fake_client_id(), client_secret=fetch_fake_client_secret())
+)

@@ -1,0 +1,15 @@
+{
+    "data":{
+        "from_location": {
+            "code": 44
+        },
+        "to_location": {
+            "code": 2797
+        },
+        "packages":[
+            {
+                "weight": 4000
+            }
+        ]
+    }
+}

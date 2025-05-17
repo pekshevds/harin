@@ -15,4 +15,5 @@ urlpatterns = [
     ),
     path("api-token-auth/", views.obtain_auth_token),
     path("page/", include("pages_app.urls", namespace="pages_app")),
+    path("cdek/", include("cdek_app.urls", namespace="cdek_app")),
 ]
