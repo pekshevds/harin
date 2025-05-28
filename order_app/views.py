@@ -16,7 +16,11 @@ from order_app.serializers import (
     SimpleItemOrderSerializer,
     SimpleOrderWithoutClientSerializer,
 )
-from order_app.services.order import handle_order_list, order_by_id
+from order_app.services.order import (
+    handle_order_list,
+    order_by_id,
+    send_order_list_from_rain_block_ru,
+)
 
 default_number_of_page = 1
 item_count_per_page = 5
@@ -94,6 +98,22 @@ class OrderWithoutAuthorView(APIView):
             queryset = handle_order_list(order_list=data, author=None)
             serializer = OrderSerializer(queryset, many=True)
             response["data"] = serializer.data
+            response["success"] = True
+        return Response(response)
+
+
+class OrderRainBlockRuView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        response = {"data": []}
+        data = request.data.get("data")
+        if not data:
+            return Response(response)
+        logger.info({"order_data": data})
+        serializer = SimpleOrderWithoutClientSerializer(data=data, many=True)
+        if serializer.is_valid(raise_exception=True):
+            send_order_list_from_rain_block_ru(order_list=data)
             response["success"] = True
         return Response(response)
 

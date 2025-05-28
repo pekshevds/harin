@@ -8,9 +8,19 @@ def send_sms(subject: str, message: str, recipient_list: list[str]):
     pass
 
 
-def send_mail(subject: str, message: str, recipient_list: list[str]):
+def send_mail(
+    subject: str,
+    message: str,
+    recipient_list: list[str],
+    html_message: str | None = None,
+    from_email: str | None = None,
+):
     send_mail_from_django(
-        subject=subject, message=message, from_email=None, recipient_list=recipient_list
+        subject=subject,
+        message=message,
+        from_email=from_email,
+        recipient_list=recipient_list,
+        html_message=html_message,
     )
 
 

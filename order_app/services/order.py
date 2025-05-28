@@ -1,8 +1,10 @@
 from django.db import transaction
 from django.db.models import QuerySet
 from order_app.models import Order, ItemOrder
+from django.template.loader import render_to_string
 from auth_app.models import User
 from catalog_app.services.good import good_by_id
+from auth_app.transport import send_mail
 
 
 def order_by_id(order_id: str) -> Order:
@@ -70,3 +72,23 @@ def handle_order_list(order_list: list[dict], author: User) -> QuerySet:
             order = handle_order(order_dict=order_item, author=author)
             orders_id.append(order.id)
     return Order.objects.filter(id__in=orders_id)
+
+
+def prepare_order_items(items: list[dict]) -> None:
+    for index, item in enumerate(items, start=1):
+        good = good_by_id(good_id=item["good_id"])
+        item["index"] = index
+        item["art"] = good.art if good else ""
+        item["name"] = good.name if good else ""
+
+
+def send_order_list_from_rain_block_ru(order_list: list[dict]) -> None:
+    for order_item in order_list:
+        prepare_order_items(order_item["items"])
+        subject = "Новый заказ"
+        message = "Новый заказ"
+        recipient_list = [order_item["email"], "89205772244@mail.ru"]
+        html_message = render_to_string(
+            "order_app/html_message.html", context=order_item
+        )
+        send_mail(subject, message, recipient_list, html_message)

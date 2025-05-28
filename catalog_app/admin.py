@@ -192,6 +192,7 @@ class GoodAdmin(admin.ModelAdmin):
         "preview",
         "category",
         "manufacturer",
+        "id",
     )
     search_fields = (
         "name",
