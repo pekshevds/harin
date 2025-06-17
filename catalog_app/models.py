@@ -96,11 +96,6 @@ class Phrase(Directory):
         verbose_name_plural = "Фразы для замены нулевого количества"
 
 
-class ActiveGoodsManager(models.Manager):
-    def get_queryset(self) -> QuerySet:
-        return super().get_queryset().filter(is_active=True)
-
-
 class Good(Directory):
     art = models.CharField(
         verbose_name="Артикул",
@@ -262,12 +257,6 @@ class Good(Directory):
 
     def save(self, *args, **kwargs) -> None:
         return super().save(*args, **kwargs)
-
-    @property
-    def active_items(self):
-        return self.objects.filter(is_active=True)
-
-    objects = models.Manager()
 
     class Meta:
         verbose_name = "Товар"

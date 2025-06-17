@@ -1,9 +1,13 @@
 from typing import List
-from django.db.models import Q
+from django.db.models import Q, QuerySet
 from django.db import transaction
 from catalog_app.models import Good, Manufacturer, Category
 from catalog_app.services.manufacturer import handle_manufacturer
 from catalog_app.services.category import handle_category
+
+
+def active_items() -> QuerySet:
+    return Good.objects.filter(is_active=True)
 
 
 def good_by_id(good_id: str) -> Good:
@@ -53,24 +57,24 @@ def handle_good_list(good_list: dict) -> List[Good]:
 
 
 def fetch_goods_queryset_by_name_or_article(search: str):
-    queryset = Good.active_items.filter(
+    queryset = active_items().filter(
         Q(name__icontains=search) | Q(art__icontains=search)
     )
     return queryset
 
 
 def fetch_goods_queryset_by_manufacturer(manufacturers: List[Manufacturer]):
-    queryset = Good.active_items.filter(manufacturer__in=manufacturers)
+    queryset = active_items().filter(manufacturer__in=manufacturers)
     return queryset
 
 
 def fetch_goods_queryset_by_category(categories: List[Category]):
-    queryset = Good.active_items.filter(manufacturer__in=categories)
+    queryset = Good.active_items().filter(manufacturer__in=categories)
     return queryset
 
 
 def fetch_goods_queryset_by_group(group: Good):
-    queryset = Good.active_items.filter(parent=group).order_by("-is_group", "name")
+    queryset = active_items().filter(parent=group).order_by("-is_group", "name")
     return queryset
 
 
@@ -84,5 +88,5 @@ def fetch_goods_queryset_by_filters(
     if categories:
         filters.add(Q(category__in=categories), Q.AND)
 
-    queryset = Good.active_items.filter(filters)
+    queryset = active_items().filter(filters)
     return queryset
