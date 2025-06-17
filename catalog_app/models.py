@@ -264,6 +264,7 @@ class Good(Directory):
         return super().save(*args, **kwargs)
 
     active_items = ActiveGoodsManager()
+    objects = models.Manager()
 
     class Meta:
         verbose_name = "Товар"
