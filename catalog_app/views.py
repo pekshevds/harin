@@ -86,7 +86,7 @@ class GoodView(APIView):
                 filters = fetch_filters(request=request)
                 queryset = fetch_goods_by_filters(filters)
             if queryset is None:
-                queryset = Good.objects.all()
+                queryset = Good.active_items.all()
 
             paginator = Paginator(queryset, count)
             serializer = GoodSerializer(paginator.get_page(page_number), many=True)

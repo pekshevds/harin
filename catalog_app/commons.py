@@ -40,7 +40,7 @@ def update_yml_catalog_xml() -> None:
     yml_catalog = YmlCatalog(
         "catalog", "magazin-poliva1", settings.FRONTEND_DOMAIN, "site"
     )
-    queryset = Good.objects.all()
+    queryset = Good.active_items.all()
     categories = []
     offers = []
     for good in queryset:

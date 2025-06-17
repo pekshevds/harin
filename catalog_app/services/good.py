@@ -53,22 +53,24 @@ def handle_good_list(good_list: dict) -> List[Good]:
 
 
 def fetch_goods_queryset_by_name_or_article(search: str):
-    queryset = Good.objects.filter(Q(name__icontains=search) | Q(art__icontains=search))
+    queryset = Good.active_items.filter(
+        Q(name__icontains=search) | Q(art__icontains=search)
+    )
     return queryset
 
 
 def fetch_goods_queryset_by_manufacturer(manufacturers: List[Manufacturer]):
-    queryset = Good.objects.filter(manufacturer__in=manufacturers)
+    queryset = Good.active_items.filter(manufacturer__in=manufacturers)
     return queryset
 
 
 def fetch_goods_queryset_by_category(categories: List[Category]):
-    queryset = Good.objects.filter(manufacturer__in=categories)
+    queryset = Good.active_items.filter(manufacturer__in=categories)
     return queryset
 
 
 def fetch_goods_queryset_by_group(group: Good):
-    queryset = Good.objects.filter(parent=group).order_by("-is_group", "name")
+    queryset = Good.active_items.filter(parent=group).order_by("-is_group", "name")
     return queryset
 
 
@@ -82,5 +84,5 @@ def fetch_goods_queryset_by_filters(
     if categories:
         filters.add(Q(category__in=categories), Q.AND)
 
-    queryset = Good.objects.filter(filters)
+    queryset = Good.active_items.filter(filters)
     return queryset

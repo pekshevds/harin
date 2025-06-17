@@ -1,6 +1,7 @@
 from django.db import models
 
 # from pytils.translit import slugify
+from django.db.models import QuerySet
 from server.base import Base
 from server.base import Directory
 from image_app.models import Image
@@ -95,6 +96,11 @@ class Phrase(Directory):
         verbose_name_plural = "Фразы для замены нулевого количества"
 
 
+class ActiveGoodsManager(models.Manager):
+    def get_queryset(self) -> QuerySet:
+        return super().get_queryset().filter(is_active=True)
+
+
 class Good(Directory):
     art = models.CharField(
         verbose_name="Артикул",
@@ -182,7 +188,7 @@ class Good(Directory):
         blank=True,
         null=True,
     )
-    is_active = models.BooleanField(verbose_name="Активен", default=False)
+    is_active = models.BooleanField(verbose_name="Активен", default=True)
     manufacturer = models.ForeignKey(
         Manufacturer,
         on_delete=models.PROTECT,
@@ -256,6 +262,8 @@ class Good(Directory):
 
     def save(self, *args, **kwargs) -> None:
         return super().save(*args, **kwargs)
+
+    active_items = ActiveGoodsManager()
 
     class Meta:
         verbose_name = "Товар"
