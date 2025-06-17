@@ -199,6 +199,7 @@ class GoodAdmin(admin.ModelAdmin):
         "art",
     )
     list_filter = (
+        "is_active",
         "manufacturer",
         "category",
     )

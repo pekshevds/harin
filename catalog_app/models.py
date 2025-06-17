@@ -263,7 +263,9 @@ class Good(Directory):
     def save(self, *args, **kwargs) -> None:
         return super().save(*args, **kwargs)
 
-    active_items = ActiveGoodsManager()
+    def active_items(self):
+        return self.objects.filter(is_active=True)
+
     objects = models.Manager()
 
     class Meta:
