@@ -15,6 +15,7 @@ from catalog_app.serializers import (
 from catalog_app.services.good import (
     fetch_goods_queryset_by_name_or_article,
     fetch_goods_queryset_by_group,
+    active_items,
 )
 from catalog_app.commons import fetch_goods_by_filters, fetch_filters
 from catalog_app.services.update_catalog import update_catalog_from_json
@@ -86,7 +87,7 @@ class GoodView(APIView):
                 filters = fetch_filters(request=request)
                 queryset = fetch_goods_by_filters(filters)
             if queryset is None:
-                queryset = Good.active_items.all()
+                queryset = active_items()
 
             paginator = Paginator(queryset, count)
             serializer = GoodSerializer(paginator.get_page(page_number), many=True)

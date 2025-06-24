@@ -9,6 +9,7 @@ from catalog_app.models import Category as CategoryModel
 from yml_catalog import YmlCatalog, Category, Offer
 from django.conf import settings
 from const_app.commons import fetch_current_consts
+from catalog_app.services.good import active_items
 
 
 def fill_seo_category_defaults() -> None:
@@ -40,7 +41,7 @@ def update_yml_catalog_xml() -> None:
     yml_catalog = YmlCatalog(
         "catalog", "magazin-poliva1", settings.FRONTEND_DOMAIN, "site"
     )
-    queryset = Good.active_items.all()
+    queryset = active_items()
     categories = []
     offers = []
     for good in queryset:
