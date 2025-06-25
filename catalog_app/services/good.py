@@ -69,7 +69,7 @@ def fetch_goods_queryset_by_manufacturer(manufacturers: List[Manufacturer]):
 
 
 def fetch_goods_queryset_by_category(categories: List[Category]):
-    queryset = Good.active_items().filter(manufacturer__in=categories)
+    queryset = active_items().filter(manufacturer__in=categories)
     return queryset
 
 
