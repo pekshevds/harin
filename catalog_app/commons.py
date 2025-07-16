@@ -104,15 +104,16 @@ def secret_from_string(string: str) -> str:
 
 
 def fetch_filters(request: HttpRequest) -> list:
+    categories = None
+    obj_id = request.GET.get("category_id")
+    if obj_id:
+        categories = category_by_id_list(obj_id.split(","))
+
     manufacturers = None
     obj_id = request.GET.get("manufacturer_id")
     if obj_id:
         manufacturers = manufacturer_by_id_list(obj_id.split(","))
 
-    categories = None
-    obj_id = request.GET.get("category_id")
-    if obj_id:
-        categories = category_by_id_list(obj_id.split(","))
     return [categories, manufacturers]
 
 

@@ -79,15 +79,16 @@ def fetch_goods_queryset_by_group(group: Good):
 
 
 def fetch_goods_queryset_by_filters(
-    manufacturers: List[Manufacturer], categories: List[Category]
-) -> QuerySet | None:
+    categories: List[Category], manufacturers: List[Manufacturer]
+) -> QuerySet:
     filters = Q()
-    if manufacturers:
-        filters.add(Q(manufacturer__in=manufacturers), Q.AND)
 
     if categories:
         filters.add(Q(category__in=categories), Q.AND)
 
+    if manufacturers:
+        filters.add(Q(manufacturer__in=manufacturers), Q.AND)
+
     if len(filters) > 0:
         return active_items().filter(filters)
-    return None
+    return active_items()
