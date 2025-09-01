@@ -1,4 +1,4 @@
-from typing import List
+from typing import Any
 from django.db.models import QuerySet, Model
 from django.db import transaction
 
@@ -6,15 +6,15 @@ from django.db import transaction
 CatalogModel = type[Model]
 
 
-def object_by_id(_class: CatalogModel, id: str) -> CatalogModel | None:
+def object_by_id(_class: CatalogModel, id: str) -> Any | None:
     return _class.objects.filter(id=id).first()
 
 
-def object_by_id_list(_class: CatalogModel, ids: List[str]) -> QuerySet:
+def object_by_id_list(_class: CatalogModel, ids: list[str]) -> QuerySet:
     return _class.objects.filter(id__in=ids)
 
 
-def handle_object(_class: CatalogModel, object_dir: dict) -> CatalogModel | None:
+def handle_object(_class: CatalogModel, object_dir: dict) -> Any | None:
     key_list = ["name", "comment"]
     obj, created = _class.objects.get_or_create(id=object_dir.get("id"))
     for key in key_list:
@@ -24,7 +24,7 @@ def handle_object(_class: CatalogModel, object_dir: dict) -> CatalogModel | None
     return obj
 
 
-def handle_object_list(_class: CatalogModel, object_list: List[dict]) -> QuerySet:
+def handle_object_list(_class: CatalogModel, object_list: list[dict]) -> QuerySet:
     ids = []
     with transaction.atomic():
         for object_item in object_list:

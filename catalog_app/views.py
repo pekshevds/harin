@@ -15,11 +15,14 @@ from catalog_app.serializers import (
 from catalog_app.services.good import (
     fetch_goods_queryset_by_name_or_article,
     fetch_goods_queryset_by_group,
-    active_items,
+    active_items as active_goods,
 )
 from catalog_app.commons import fetch_goods_by_filters, fetch_filters
 from catalog_app.services.update_catalog import update_catalog_from_json
-from catalog_app.services.category import fetch_menu_by_category
+from catalog_app.services.category import (
+    fetch_menu_by_category,
+    active_items as active_categories,
+)
 from catalog_app.commons import update_yml_catalog_xml
 
 
@@ -52,7 +55,7 @@ class CategoryView(APIView):
             queryset = Category.objects.filter(id=id)
             serializer = CategorySerializer(queryset, many=True)
         else:
-            queryset = Category.objects.all()
+            queryset = active_categories()
             serializer = CategorySerializer(queryset, many=True)
         response = {
             "data": serializer.data,
@@ -87,7 +90,7 @@ class GoodView(APIView):
                 filters = fetch_filters(request=request)
                 queryset = fetch_goods_by_filters(filters)
             if queryset is None:
-                queryset = active_items()
+                queryset = active_goods()
 
             paginator = Paginator(queryset, count)
             serializer = GoodSerializer(paginator.get_page(page_number), many=True)

@@ -32,14 +32,7 @@ class CategoryKindAdmin(admin.ModelAdmin):
     fieldsets = (
         (
             None,
-            {
-                "fields": (
-                    "name",
-                    "parent",
-                    "code",
-                    "comment",
-                )
-            },
+            {"fields": ("name", ("parent", "code", "comment"), "is_active")},
         ),
         (
             "CEO",
@@ -54,12 +47,7 @@ class CategoryKindAdmin(admin.ModelAdmin):
             },
         ),
     )
-    list_display = (
-        "__str__",
-        "id",
-        "parent",
-        "code",
-    )
+    list_display = ("__str__", "id", "parent", "code", "is_active")
     actions = [fill_seo_category_defaults]
 
 

@@ -16,7 +16,11 @@ class Menu:
     items: list[Any] | None
 
 
-def category_by_id(id: str) -> Category:
+def active_items() -> QuerySet:
+    return Category.objects.filter(is_active=True)
+
+
+def category_by_id(id: str) -> Category | None:
     return object_by_id(Category, id=id)
 
 
@@ -34,14 +38,12 @@ def handle_category_list(category_list: list[dict]) -> QuerySet:
 
 def fetch_menu_by_category() -> list[Menu] | None:
     submenu1: list[Menu] = list()
-    for subcategory1 in Category.objects.filter(parent=None).order_by("name"):
+    for subcategory1 in active_items().filter(parent=None).order_by("name"):
         submenu2: list[Menu] = list()
-        for subcategory2 in Category.objects.filter(parent=subcategory1).order_by(
-            "name"
-        ):
+        for subcategory2 in active_items().filter(parent=subcategory1).order_by("name"):
             submenu3: list[Menu] = list()
-            for subcategory3 in Category.objects.filter(parent=subcategory2).order_by(
-                "name"
+            for subcategory3 in (
+                active_items().filter(parent=subcategory2).order_by("name")
             ):
                 submenu3.append(Menu(category=subcategory3, items=None))
             submenu2.append(Menu(category=subcategory2, items=submenu3))

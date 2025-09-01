@@ -45,6 +45,7 @@ class Category(Directory):
         blank=True,
     )
     count = models.IntegerField(null=True, blank=True, default=0)
+    is_active = models.BooleanField(verbose_name="Активен", default=True)
     seo_title = models.TextField(
         verbose_name="<title>", null=True, blank=True, default=fetch_seo_title_category
     )
